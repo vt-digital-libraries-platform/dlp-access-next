@@ -1,0 +1,39 @@
+name: "PR preview deployment (test)"
+on:
+  push:
+    branches:
+      - cicd-pipeline
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT_ID: ${{secrets.AWS_ACCOUNT_ID}}
+  AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}
+  ECR_REPO: dlp-access-next/dev
+  EB_APP: dlp-access-next
+  EB_ENV: dev-env
+  EB_S3_BUCKET: ${{secrets.EB_S3_BUCKET}}
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v5
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{env.AWS_ROLE_ARN}}
+          role-session-name: GHActions_dlp-access-next-${{ github.run_id }}
+      - name: Verify AWS identity
+        run: |
+          if aws sts get-caller-identity > /dev/null 2>&1; then
+            echo "AWS credentials is valid."
+          else
+            echo "Failed to get caller identity. Invalid credentials." >&2
+            exit 1
+          fi

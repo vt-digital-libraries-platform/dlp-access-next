@@ -1,0 +1,13 @@
+{
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "226388486048.dkr.ecr.us-east-1.amazonaws.com/nextjs-eb-test:latest",
+    "Update": "true"
+  },
+  "Ports": [{ "ContainerPort": "80" }],
+  "Logging": "/var/log/app",
+  "Environment": [
+    { "Name": "HOSTNAME", "Value": "0.0.0.0" },
+    { "Name": "PORT", "Value": "80" }
+  ]
+}
