@@ -88,7 +88,7 @@ jobs:
           echo "APP_VERSION=$APP_VERSION" >> $GITHUB_OUTPUT
           aws elasticbeanstalk create-application-version \
             --application-name ${{env.EB_APP}} \
-            --version-label $APP_VERSION
+            --version-label $APP_VERSION \
             --source-bundle S3Bucket=${{env.EB_S3_BUCKET}},S3Key=${{env.EB_APP}}/app-${{ env.COMMIT_HASH }}.zip
 
       - name: Update/deploy environment
@@ -122,4 +122,3 @@ jobs:
           aws elasticbeanstalk wait environment-updated \
             --application-name ${{env.EB_APP}} \
             --environment-name ${{env.EB_ENV}}
- 
