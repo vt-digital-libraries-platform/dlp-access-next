@@ -10,7 +10,7 @@ env:
   AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}
   ECR_REPO: dlp-access-next/dev
   EB_APP: dlp-access-next
-  EB_ENV: ${{ github.ref }} # TODO: change this to use PR# instead
+  EB_ENV: ${{ github.ref_name }} # TODO: change this to use PR# instead
   EB_S3_BUCKET: ${{secrets.EB_S3_BUCKET}}
   EB_CONFIG_TEMPLATE: dev-env-sc
   COMMIT_HASH: ""
