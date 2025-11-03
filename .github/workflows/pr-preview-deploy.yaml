@@ -122,3 +122,4 @@ jobs:
           aws elasticbeanstalk wait environment-updated \
             --application-name ${{env.EB_APP}} \
             --environment-name ${{env.EB_ENV}}
+ 
