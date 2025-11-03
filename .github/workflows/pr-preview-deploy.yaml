@@ -48,7 +48,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build Docker image
+      - name: Build Docker image and push to ECR
         env:
           REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           REPOSITORY: ${{env.ECR_REPO}}
@@ -56,3 +56,25 @@ jobs:
         run: |
           docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Create Dockerrun.aws.json
+        env:
+          IMAGE_URI: ${{steps.login-ecr.outputs.registry}}/${{env.ECR_REPO}}:${{ env.COMMIT_HASH }}
+        run: |
+          cat > Dockerrun.aws.json <<JSON
+          {
+            "AWSEBDockerrunVersion": "1",
+            "Image": { "Name": "${IMAGE_URI}" },
+            "Ports": [{ "ContainerPort": "80" }],
+            "Logging": "/var/log/app",
+            "Environment": [
+              { "Name": "HOSTNAME", "Value": "0.0.0.0" },
+              { "Name": "PORT", "Value": "80" }
+            ]
+          }
+          JSON
+
+      - name: Upload EB config file to S3
+        run: |
+          zip -r app-${{ env.COMMIT_HASH }}.zip Dockerrun.aws.json
+          aws s3 cp app-${{ env.COMMIT_HASH }}.zip s3://${{env.EB_S3_BUCKET}}/${{env.EB_APP}}/app-${{ env.COMMIT_HASH }}.zip
