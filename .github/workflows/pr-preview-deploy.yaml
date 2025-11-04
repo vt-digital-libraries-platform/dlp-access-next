@@ -9,7 +9,6 @@ env:
   AWS_REGION: us-east-1
   AWS_ACCOUNT_ID: ${{secrets.AWS_ACCOUNT_ID}}
   AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}
-  AWS_EB_OP_ROLE_ARN: ${{secrets.AWS_EB_OP_ROLE_ARN}}
   ECR_REPO: dlp-access-next/dev
   EB_APP: dlp-access-next
   EB_ENV: ${{ github.ref_name }} # TODO: change this to use PR# instead
@@ -109,8 +108,7 @@ jobs:
               --application-name ${{env.EB_APP}} \
               --environment-name ${{env.EB_ENV}} \
               --version-label ${{steps.create-app-version.outputs.APP_VERSION}} \
-              --template-name ${{env.EB_CONFIG_TEMPLATE}} \
-              --operations-role ${{env.AWS_EB_OP_ROLE_ARN}}
+              --template-name ${{env.EB_CONFIG_TEMPLATE}}
           else
             echo "Updating ${{env.EB_ENV}}..."
             aws elasticbeanstalk update-environment \
