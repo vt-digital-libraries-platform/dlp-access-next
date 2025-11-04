@@ -1,9 +1,7 @@
 name: "PR preview deployment (test)"
 on:
-  push:
-    branches:
-      - cicd-pipeline
-  # TODO: PR triggered workflow
+  pull_request:
+    types: [synchronize, opened]
 
 env:
   AWS_REGION: us-east-1
@@ -20,7 +18,8 @@ permissions:
   contents: read
 
 jobs:
-  deploy:
+  deploy-preview:
+    if: contains(github.event.pull_request.labels.*.name, 'Deploy preview')
     runs-on: ubuntu-latest
 
     steps:
