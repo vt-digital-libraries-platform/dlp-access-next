@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - cicd-pipeline
+  # TODO: PR triggered workflow
 
 env:
   AWS_REGION: us-east-1
@@ -108,7 +109,6 @@ jobs:
               --environment-name ${{env.EB_ENV}} \
               --version-label ${{steps.create-app-version.outputs.APP_VERSION}} \
               --template-name ${{env.EB_CONFIG_TEMPLATE}}
-              # add other options here
           else
             echo "Updating ${{env.EB_ENV}}..."
             aws elasticbeanstalk update-environment \
