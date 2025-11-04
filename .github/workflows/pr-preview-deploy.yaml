@@ -9,7 +9,7 @@ env:
   AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}
   ECR_REPO: dlp-access-next/dev
   EB_APP: dlp-access-next
-  EB_ENV: ${{ github.ref_name }} # TODO: change this to use PR# instead
+  EB_ENV: ${{ github.head_ref }}
   EB_S3_BUCKET: ${{secrets.EB_S3_BUCKET}}
   EB_CONFIG_TEMPLATE: dev-env-sc
   COMMIT_HASH: ""
@@ -42,6 +42,28 @@ jobs:
             echo "AWS credentials is valid."
           else
             echo "Failed to get caller identity. Invalid credentials." >&2
+            exit 1
+          fi
+
+      - name: Check EB environment status
+        id: check-eb-env-status
+        run: |
+          set +e
+          STATUS=$(aws elasticbeanstalk describe-environments \
+            --application-name ${{env.EB_APP}} \
+            --environment-names ${{env.EB_ENV}} \
+            --no-include-deleted \
+            --query 'Environments[0].Status' \
+            --output text 2>/dev/null)
+          set -e
+
+          echo "EB_ENV_STATUS=$STATUS" >> $GITHUB_OUTPUT
+          if [ "$STATUS" = "None" ] || [ -z "$STATUS" ]; then
+            echo "Creating new environment: ${{env.EB_ENV}}"
+          elif [ "$STATUS" = "Ready" ]; then
+            echo "Updating existing environment: ${{env.EB_ENV}}"
+          else
+            echo "Environment not in ready state (current status: $STATUS)"
             exit 1
           fi
 
@@ -93,22 +115,14 @@ jobs:
 
       - name: Update/deploy environment
         run: |
-          set +e
-          aws elasticbeanstalk describe-environments \
-            --application-name ${{env.EB_APP}} \
-            --environment-names ${{env.EB_ENV}} \
-            --no-include-deleted | jq -e '.Environments|length>0'
-          EXISTS=$?
-          set -e
-
-          if [ $EXISTS -ne 0 ]; then
+          if [ ${{steps.check-eb-env-status.outputs.EB_ENV_STATUS}} = "None" ] || [ -z ${{steps.check-eb-env-status.outputs.EB_ENV_STATUS}} ]; then
             echo "Creating new application environment..."
             aws elasticbeanstalk create-environment \
               --application-name ${{env.EB_APP}} \
               --environment-name ${{env.EB_ENV}} \
               --version-label ${{steps.create-app-version.outputs.APP_VERSION}} \
               --template-name ${{env.EB_CONFIG_TEMPLATE}}
-          else
+          elif [ ${{steps.check-eb-env-status.outputs.EB_ENV_STATUS}} = "Ready" ]; then
             echo "Updating ${{env.EB_ENV}}..."
             aws elasticbeanstalk update-environment \
               --environment-name ${{env.EB_ENV}} \
