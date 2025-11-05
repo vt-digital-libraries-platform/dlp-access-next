@@ -196,9 +196,9 @@ jobs:
               ]
             }'
           echo "CNAME_RECORD=${CNAME_RECORD}" >> $GITHUB_OUTPUT
-          echo "CNAME record created: ${CNAME_RECORD}"
+          echo "CNAME record created: https://${CNAME_RECORD}"
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           message: |
-            Preview generated: ${{steps.create-cname-record.outputs.CNAME_RECORD}}
+            Preview generated: https://${{steps.create-cname-record.outputs.CNAME_RECORD}}
