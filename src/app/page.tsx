@@ -60,7 +60,7 @@ export default function Home() {
             Documentation
           </a>
         </div>
-        <p>Deployed on Nov 5 13:28 PM.</p>
+        <p>Deployed on Nov 6.</p>
       </main>
     </div>
   );
