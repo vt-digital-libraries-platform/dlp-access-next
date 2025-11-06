@@ -164,8 +164,8 @@ jobs:
             echo "Error getting deployment URL"
             exit 1
           else
-            echo "EB_CNAME=${EB_CNAME}" >> $GITHUB_OUTPUT
-            echo "EB CNAME: ${EB_CNAME}"
+            echo "EB_CNAME=${CNAME}" >> $GITHUB_OUTPUT
+            echo "EB CNAME: ${CNAME}"
           fi
 
       - name: Create Route53 record for EB environment
