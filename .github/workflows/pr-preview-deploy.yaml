@@ -164,15 +164,14 @@ jobs:
             echo "Error getting deployment URL"
             exit 1
           else
-            DEPLOY_URL="https://${CNAME}"
-            echo "DEPLOY_URL=${DEPLOY_URL}" >> $GITHUB_OUTPUT
-            echo "Preview URL: ${DEPLOY_URL}"
+            echo "EB_CNAME=${EB_CNAME}" >> $GITHUB_OUTPUT
+            echo "EB CNAME: ${EB_CNAME}"
           fi
 
       - name: Create Route53 record for EB environment
         id: create-cname-record
         run: |
-          EB_URL=${{steps.deploy-result.outputs.DEPLOY_URL}}
+          EB_CNAME=${{steps.deploy-result.outputs.EB_CNAME}}
           HOSTED_ZONE_ID=${{secrets.ROUTE53_HOSTED_ZONE_ID}}
           HOSTED_ZONE_NAME=${{secrets.ROUTE53_HOSTED_ZONE_NAME}}
           CNAME_RECORD="${{env.EB_ENV}}-${{env.EB_APP}}-dev.${HOSTED_ZONE_NAME}"
@@ -189,7 +188,7 @@ jobs:
                     "Type": "CNAME",
                     "TTL": 300,
                     "ResourceRecords": [
-                      { "Value": "${EB_URL}" }
+                      { "Value": "${EB_CNAME}" }
                     ]
                   }
                 }
