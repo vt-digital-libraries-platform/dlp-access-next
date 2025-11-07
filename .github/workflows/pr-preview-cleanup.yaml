@@ -1,0 +1,136 @@
+name: "Cleaning up PR preview environment when PR is closed"
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT_ID: ${{secrets.AWS_ACCOUNT_ID}}
+  AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}
+  ECR_REPO: dlp-access-next/dev
+  EB_APP: dlp-access-next
+  EB_ENV: pr-${{ github.event.pull_request.number }}-preview
+  EB_S3_BUCKET: ${{secrets.EB_S3_BUCKET}}
+  EB_CONFIG_TEMPLATE: dev-env-sc
+  COMMIT_HASH: ""
+permissions:
+  id-token: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  cleanup-preview:
+    if: contains(github.event.pull_request.labels.*.name, 'Deploy preview')
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v5
+
+      - name: Set commit hash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            SHA="${{ github.sha }}"
+          fi
+          echo "COMMIT_HASH=${SHA::7}" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{env.AWS_ROLE_ARN}}
+          role-session-name: GHActions_dlp-access-next-${{ github.run_id }}
+
+      - name: Verify AWS identity
+        run: |
+          if aws sts get-caller-identity > /dev/null 2>&1; then
+            echo "AWS credentials is valid."
+          else
+            echo "Failed to get caller identity. Invalid credentials." >&2
+            exit 1
+          fi
+
+      - name: Check EB environment status
+        id: check-eb-env-status
+        run: |
+          set +e
+          STATUS=$(aws elasticbeanstalk describe-environments \
+            --application-name ${{env.EB_APP}} \
+            --environment-names ${{env.EB_ENV}} \
+            --no-include-deleted \
+            --query 'Environments[0].Status' \
+            --output text 2>/dev/null)
+          set -e
+
+          echo "EB_ENV_STATUS=${STATUS}" >> $GITHUB_OUTPUT
+          if [ "${STATUS}" = "None" ] || [ -z "${STATUS}" ]; then
+            echo "EB environment ${{env.EB_ENV}} does not exist."
+          elif [ "${STATUS}" = "Ready" ]; then
+            echo "Terminating existing environment: ${{env.EB_ENV}}"
+          else
+            echo "Environment ${{env.EB_ENV}} not in ready state (current status: ${STATUS})."
+            exit 1
+          fi
+
+      - name: Remove Route53 record for EB environment if it exists
+        if: steps.check-eb-env-status.outputs.EB_ENV_STATUS == 'Ready'
+        env:
+          EB_CNAME: ${{steps.deploy-result.outputs.EB_CNAME}}
+          HOSTED_ZONE_ID: ${{secrets.ROUTE53_HOSTED_ZONE_ID}}
+          CNAME_RECORD: ${{env.EB_ENV}}.dlp-access-dev.${{secrets.ROUTE53_HOSTED_ZONE_NAME}}
+        run: |
+          echo "Checking if record exists: ${CNAME_RECORD}"
+          set +e
+          EXISTING_JSON=$(aws route53 list-resource-record-sets \
+            --hosted-zone-id "${HOSTED_ZONE_ID}" \
+            --query "ResourceRecordSets[?Name == '${CNAME_RECORD}'. && Type == 'CNAME' ] | [0]" \
+            --output json)
+          set -e
+
+          if [ "${EXISTING_JSON}" = "null" ] || [ -z "${EXISTING_JSON}" ]; then
+            echo "CNAME record for ${CNAME_RECORD} does not exists. Skip deleting Route53 record."
+            exit 0
+
+          echo "Deleting CNAME record..."
+          CHANGE_BATCH=$(jq -n \
+            --argjson existing_record "${EXISTING_JSON}" \
+            --arg name "${CNAME_RECORD}." \
+            --arg value "${EB_CNAME}." \
+            '{
+              Changes: [
+                {
+                  Action: "DELETE",
+                  ResourceRecordSet: $existing_record
+                }
+              ]
+            }')
+          aws route53 change-resource-record-sets \
+            --hosted-zone-id "$HOSTED_ZONE_ID" \
+            --change-batch "$CHANGE_BATCH"
+          echo "CNAME record deleted: https://${CNAME_RECORD}"
+
+      - name: Cleanup EB environment
+        if: steps.check-eb-env-status.outputs.EB_ENV_STATUS == 'Ready'
+        run: |
+          set +e
+          STATUS=$(aws elasticbeanstalk describe-environments \
+            --application-name ${{env.EB_APP}} \
+            --environment-names ${{env.EB_ENV}} \
+            --query 'Environments[0].Status' \
+            --output text 2>/dev/null)
+          set -e
+
+          echo "EB_ENV_STATUS=${STATUS}" >> $GITHUB_OUTPUT
+          if [ "${STATUS}" = "None" ] || [ -z "${STATUS}" ]; then
+            echo "EB environment has been cleaned up for this PR."
+            exit 0
+          elif [ "${STATUS}" = "Terminating" ] || [ "${STATUS}" = "Terminated" ]; then
+            echo "EB environment is ${STATUS}"
+          elif [ "${STATUS}" = "Ready" ]; then
+            echo "Cleaning up existing EB environment: ${{env.EB_ENV}}"
+          else
+            echo "Environment ${{env.EB_ENV}} not in ready state (current status: ${STATUS})"
+            exit 1
+          fi

@@ -70,7 +70,7 @@ jobs:
           elif [ "${STATUS}" = "Ready" ]; then
             echo "Updating existing environment: ${{env.EB_ENV}}"
           else
-            echo "Environment not in ready state (current status: ${STATUS})"
+            echo "Environment ${{env.EB_ENV}} not in ready state (current status: ${STATUS})"
             exit 1
           fi
 
