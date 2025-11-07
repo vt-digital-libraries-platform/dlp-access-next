@@ -118,10 +118,10 @@ jobs:
         if: steps.check-eb-env-status.outputs.EB_ENV_STATUS == 'Ready'
         run: |
           aws elasticbeanstalk terminate-environment \
-            --environment-names ${{env.EB_ENV}} \
+            --environment-name ${{env.EB_ENV}} \
             --terminate-resources
 
           aws elasticbeanstalk wait environment-terminated \
-            --environment-names ${{env.EB_ENV}} \
+            --environment-names ${{env.EB_ENV}}
 
           echo "Environment cleanup completed."
