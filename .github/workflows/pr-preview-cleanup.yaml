@@ -92,12 +92,11 @@ jobs:
           if [ "${EXISTING_JSON}" = "null" ] || [ -z "${EXISTING_JSON}" ]; then
             echo "CNAME record for ${CNAME_RECORD} does not exists. Skip deleting Route53 record."
             exit 0
+          fi
 
           echo "Deleting CNAME record..."
           CHANGE_BATCH=$(jq -n \
             --argjson existing_record "${EXISTING_JSON}" \
-            --arg name "${CNAME_RECORD}." \
-            --arg value "${EB_CNAME}." \
             '{
               Changes: [
                 {
