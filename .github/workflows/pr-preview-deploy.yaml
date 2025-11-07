@@ -1,7 +1,7 @@
-name: "PR preview deployment (test)"
+name: "PR preview deployment"
 on:
   pull_request:
-    types: [synchronize, opened]
+    types: [synchronize, opened, labeled]
 
 env:
   AWS_REGION: us-east-1
@@ -9,7 +9,7 @@ env:
   AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}
   ECR_REPO: dlp-access-next/dev
   EB_APP: dlp-access-next
-  EB_ENV: pr-${{ github.event.pull_request.number }}-preview
+  EB_ENV: pr-${{ github.event.pull_request.number }}-preview-dlp-access-next
   EB_S3_BUCKET: ${{secrets.EB_S3_BUCKET}}
   EB_CONFIG_TEMPLATE: dev-env-sc
   COMMIT_HASH: ""
