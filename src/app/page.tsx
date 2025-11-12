@@ -33,7 +33,6 @@ export default function Home() {
             </a>{" "}
             center.
           </p>
-          <p> Deployed at Nov. 12</p>
         </div>
         <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
           <a
