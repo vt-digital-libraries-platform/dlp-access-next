@@ -1,7 +1,7 @@
 name: "PR preview deployment"
 on:
   pull_request:
-    types: [synchronize, opened, labeled]
+    types: [synchronize, labeled]
 
 env:
   AWS_REGION: us-east-1
@@ -20,9 +20,12 @@ permissions:
 
 jobs:
   deploy-preview:
-    if: contains(github.event.pull_request.labels.*.name, 'Deploy preview')
+    if: >
+      (github.event.action == 'labeled' &&
+      github.event.label.name == 'Deploy preview') ||
+      (github.event.action != 'labeled' &&
+      contains(github.event.pull_request.labels.*.name, 'Deploy preview'))
     runs-on: ubuntu-latest
-
     steps:
       - name: Git clone repository
         uses: actions/checkout@v5
