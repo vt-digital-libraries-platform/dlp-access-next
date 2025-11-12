@@ -98,11 +98,11 @@ jobs:
           {
             "AWSEBDockerrunVersion": "1",
             "Image": { "Name": "${IMAGE_URI}" },
-            "Ports": [{ "ContainerPort": "80" }],
+            "Ports": [{ "ContainerPort": 3000, "HostPort": 80 }],
             "Logging": "/var/log/app",
             "Environment": [
               { "Name": "HOSTNAME", "Value": "0.0.0.0" },
-              { "Name": "PORT", "Value": "80" }
+              { "Name": "PORT", "Value": "3000" }
             ]
           }
           JSON
