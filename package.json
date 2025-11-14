@@ -1,6 +1,6 @@
 {
-  "name": "sample-next",
-  "version": "0.1.0",
+  "name": "dlp-access-next",
+  "version": "0.0.1",
   "private": true,
   "scripts": {
     "dev": "next dev",
