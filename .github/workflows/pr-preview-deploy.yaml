@@ -1,0 +1,210 @@
+name: "PR preview deployment"
+on:
+  pull_request:
+    types: [synchronize, labeled]
+
+env:
+  AWS_REGION: us-east-1
+  AWS_ACCOUNT_ID: ${{secrets.AWS_ACCOUNT_ID}}
+  AWS_ROLE_ARN: ${{secrets.AWS_ROLE_ARN}}
+  ECR_REPO: dlp-access-next/dev
+  EB_APP: dlp-access-next
+  EB_ENV: pr-${{ github.event.pull_request.number }}-preview-dlp-access-next
+  EB_S3_BUCKET: ${{secrets.EB_S3_BUCKET}}
+  EB_CONFIG_TEMPLATE: dev-env-sc
+  COMMIT_HASH: ""
+permissions:
+  id-token: write
+  pull-requests: write
+  contents: read
+
+jobs:
+  deploy-preview:
+    if: >
+      (github.event.action == 'labeled' &&
+      github.event.label.name == 'Deploy preview') ||
+      (github.event.action != 'labeled' &&
+      contains(github.event.pull_request.labels.*.name, 'Deploy preview'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Git clone repository
+        uses: actions/checkout@v5
+
+      - name: Set commit hash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            SHA="${{ github.event.pull_request.head.sha }}"
+          else
+            SHA="${{ github.sha }}"
+          fi
+          echo "COMMIT_HASH=${SHA::7}" >> $GITHUB_ENV
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v5.1.0
+        with:
+          aws-region: ${{env.AWS_REGION}}
+          role-to-assume: ${{env.AWS_ROLE_ARN}}
+          role-session-name: GHActions_dlp-access-next-${{ github.run_id }}
+
+      - name: Verify AWS identity
+        run: |
+          if aws sts get-caller-identity > /dev/null 2>&1; then
+            echo "AWS credentials is valid."
+          else
+            echo "Failed to get caller identity. Invalid credentials." >&2
+            exit 1
+          fi
+
+      - name: Check EB environment status
+        id: check-eb-env-status
+        run: |
+          set +e
+          STATUS=$(aws elasticbeanstalk describe-environments \
+            --application-name ${{env.EB_APP}} \
+            --environment-names ${{env.EB_ENV}} \
+            --no-include-deleted \
+            --query 'Environments[0].Status' \
+            --output text 2>/dev/null)
+          set -e
+
+          echo "EB_ENV_STATUS=${STATUS}" >> $GITHUB_OUTPUT
+          if [ "${STATUS}" = "None" ] || [ -z "${STATUS}" ]; then
+            echo "Creating new environment: ${{env.EB_ENV}}"
+          elif [ "${STATUS}" = "Ready" ]; then
+            echo "Updating existing environment: ${{env.EB_ENV}}"
+          else
+            echo "Environment ${{env.EB_ENV}} not in ready state (current status: ${STATUS})"
+            exit 1
+          fi
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker image and push to ECR
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{env.ECR_REPO}}
+          IMAGE_TAG: ${{ env.COMMIT_HASH }}
+        run: |
+          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Create Dockerrun.aws.json
+        env:
+          IMAGE_URI: ${{steps.login-ecr.outputs.registry}}/${{env.ECR_REPO}}:${{ env.COMMIT_HASH }}
+        run: |
+          cat > Dockerrun.aws.json <<JSON
+          {
+            "AWSEBDockerrunVersion": "1",
+            "Image": { "Name": "${IMAGE_URI}" },
+            "Ports": [{ "ContainerPort": 3000, "HostPort": 80 }],
+            "Logging": "/var/log/app",
+            "Environment": [
+              { "Name": "HOSTNAME", "Value": "0.0.0.0" },
+              { "Name": "PORT", "Value": "3000" }
+            ]
+          }
+          JSON
+
+      - name: Upload EB config file to S3
+        run: |
+          zip -r app-${{ env.COMMIT_HASH }}.zip Dockerrun.aws.json
+          aws s3 cp app-${{ env.COMMIT_HASH }}.zip s3://${{env.EB_S3_BUCKET}}/${{env.EB_APP}}/app-${{ env.COMMIT_HASH }}.zip
+
+      - name: Create EB app version
+        id: create-app-version
+        env:
+          APP_VERSION: ${{env.EB_ENV}}-${{env.COMMIT_HASH}}
+        run: |
+          echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_OUTPUT
+          aws elasticbeanstalk create-application-version \
+            --application-name ${{env.EB_APP}} \
+            --version-label $APP_VERSION \
+            --source-bundle S3Bucket=${{env.EB_S3_BUCKET}},S3Key=${{env.EB_APP}}/app-${{ env.COMMIT_HASH }}.zip
+
+      - name: Update/deploy environment
+        run: |
+          STATUS=${{steps.check-eb-env-status.outputs.EB_ENV_STATUS}}
+          APP_VERSION=${{steps.create-app-version.outputs.APP_VERSION}}
+
+          if [ "$STATUS" = "None" ] || [ -z "$STATUS" ]; then
+            echo "Creating new application environment..."
+            aws elasticbeanstalk create-environment \
+              --application-name ${{env.EB_APP}} \
+              --environment-name ${{env.EB_ENV}} \
+              --version-label "${APP_VERSION}" \
+              --description "Automatically generated preview for PR #${{ github.event.pull_request.number }}, commit: ${{env.COMMIT_HASH}}."  \
+              --template-name ${{env.EB_CONFIG_TEMPLATE}}
+          elif [ "$STATUS" = "Ready" ]; then
+            echo "Updating ${{env.EB_ENV}}..."
+            aws elasticbeanstalk update-environment \
+              --environment-name ${{env.EB_ENV}} \
+              --version-label "${APP_VERSION}"
+          fi
+
+      - name: Wait for deployment to finish
+        id: wait-deploy
+        run: |
+          aws elasticbeanstalk wait environment-updated \
+            --application-name ${{env.EB_APP}} \
+            --environment-name ${{env.EB_ENV}} \
+            --no-include-deleted
+
+      - name: Get deployment result
+        id: deploy-result
+        run: |
+          set +e
+          CNAME=$(aws elasticbeanstalk describe-environments \
+            --application-name ${{env.EB_APP}} \
+            --environment-names ${{env.EB_ENV}} \
+            --no-include-deleted \
+            --query 'Environments[0].CNAME' \
+            --output text 2>/dev/null)
+          set -e
+
+          if [ "${CNAME}" = "None" ] || [ -z "${CNAME}" ]; then
+            echo "Error getting deployment URL"
+            exit 1
+          else
+            echo "EB_CNAME=${CNAME}" >> $GITHUB_OUTPUT
+            echo "EB CNAME: ${CNAME}"
+          fi
+
+      - name: Create Route53 record for EB environment
+        id: create-cname-record
+        env:
+          EB_CNAME: ${{steps.deploy-result.outputs.EB_CNAME}}
+          HOSTED_ZONE_ID: ${{secrets.ROUTE53_HOSTED_ZONE_ID}}
+          CNAME_RECORD: ${{env.EB_ENV}}.dlp-access-dev.${{secrets.ROUTE53_HOSTED_ZONE_NAME}}
+        run: |
+          echo "Creating CNAME record..."
+          CHANGE_BATCH=$(jq -n \
+            --arg comment "CNAME record for EB ${EB_APP} PR preview environment." \
+            --arg name "${CNAME_RECORD}." \
+            --arg value "${EB_CNAME}." \
+            '{
+              Comment: $comment,
+              Changes: [
+                {
+                  Action: "UPSERT",
+                  ResourceRecordSet: {
+                    Name: $name,
+                    Type: "CNAME",
+                    TTL: 300,
+                    ResourceRecords: [ { Value: $value } ]
+                  }
+                }
+              ]
+            }')
+          aws route53 change-resource-record-sets \
+            --hosted-zone-id "$HOSTED_ZONE_ID" \
+            --change-batch "$CHANGE_BATCH"
+          echo "CNAME_RECORD=${CNAME_RECORD}" >> $GITHUB_OUTPUT
+          echo "CNAME record created: https://${CNAME_RECORD}"
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          header: preview-status
+          message: |
+            Preview generated at https://${{steps.create-cname-record.outputs.CNAME_RECORD}}
