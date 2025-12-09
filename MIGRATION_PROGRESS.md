@@ -3,15 +3,18 @@
 ## ✅ Completed
 
 ### 1. Branch Setup
+
 - Created local branch: `feature/homepage-and-static-pages`
 - Added Claude migration repo as remote
 - Branch stays local (no pushing until clearance)
 
 ### 2. Homepage Conversion
+
 **From:** `pages/index.js` (Pages Router)  
 **To:** `src/app/page.tsx` (App Router)
 
 **Changes:**
+
 - ✅ Converted to Next.js 16 App Router Server Component
 - ✅ Added TypeScript types
 - ✅ Implemented Metadata API for SEO
@@ -24,12 +27,14 @@
 - ✅ Placeholder for data fetching (getSite function ready to uncomment)
 
 ### 3. Global Components
+
 - ✅ Created `components/Footer.tsx` (TypeScript)
 - Ready to be used across all pages
 
 ## 📋 Next Steps
 
 ### Phase 1: Complete Homepage
+
 1. **Import CSS module** in page.tsx
 2. **Create hero-bg.jpg** image or use placeholder
 3. **Implement search functionality** (client component)
@@ -37,21 +42,25 @@
 5. **Add Header component** from Claude repo
 
 ### Phase 2: Static Pages Migration
+
 Convert these pages from Claude repo:
+
 - [ ] `/about` - About page
-- [ ] `/about/formats` - Formats page  
+- [ ] `/about/formats` - Formats page
 - [ ] `/about/organizations` - Organizations page
 - [ ] `/about/team` - Team page
 - [ ] `/partner` - Partner page
 - [ ] `/permissions` - Permissions page
 
 ### Phase 3: Dynamic Pages (If Needed)
+
 - [ ] `/collection/[customKey]` - Collection detail page
 - [ ] `/archive/[customKey]` - Archive detail page
 - [ ] `/browse/formats` - Browse formats
 - [ ] `/browse/maps` - Browse maps
 
 ### Phase 4: Support Infrastructure
+
 - [ ] Set up `lib/fetchTools.ts` (data fetching utilities)
 - [ ] Configure AWS Amplify
 - [ ] Set up GraphQL queries
@@ -60,11 +69,14 @@ Convert these pages from Claude repo:
 ## 🔄 Team Coordination
 
 ### Other Developers Working On:
+
 - **Routing logic** - Will merge into main
 - **Pagination** - Separate feature
 
-### Your Workflow:
-1. **Daily sync**: 
+### Workflow:
+
+1. **Daily sync**:
+
    ```bash
    git checkout main
    git pull origin main

@@ -1,127 +1,157 @@
-import { Metadata } from 'next'
+'use client';
+
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import Image from 'next/image'
-// import { getSite } from '@/lib/fetchTools'  // Uncomment when lib is ready
+import { getSite, getBrowseCollections } from '@/lib'
+import styles from './page.module.scss'
 
-export const metadata: Metadata = {
-  title: 'Virginia Tech Digital Library - Home',
-  description: "Explore Virginia Tech's Digital Library collections and archives",
-}
-
-// This is a Server Component - data fetching happens on the server
-export default async function HomePage() {
-  // TODO: Uncomment when API is ready
-  // const site = await getSite()
-  // const siteTitle = site?.siteTitle || "Virginia Tech Digital Library"
+// Client Component - Amplify works on client side only
+export default function HomePage() {
+  const [siteTitle, setSiteTitle] = useState('Virginia Tech University Digital Libraries Platform')
+  const [recentCollections, setRecentCollections] = useState<any[]>([])
   
-  const siteTitle = "Virginia Tech Digital Library"  // Temporary hardcoded value
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // Small delay to ensure Amplify is configured
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
+        const site = await getSite()
+        if (site?.title) {
+          setSiteTitle(site.title)
+        }
+        
+        // Fetch recent collections (first 3, sorted by date descending)
+        const collections = await getBrowseCollections(
+          { field: 'create_date', direction: 'desc' },
+          3,
+          null
+        )
+        
+        if (collections?.items) {
+          setRecentCollections(collections.items)
+        }
+      } catch (error) {
+        console.error('Failed to fetch data:', error)
+      }
+    }
+    fetchData()
+  }, [])
   
   return (
-    <>
-      {/* Hero Banner with Background Image */}
-      <div className="hero-banner">
-        <Image 
-          src="/images/hero-bg.jpg" 
-          alt="Virginia Tech Campus"
-          fill
-          priority
-          className="hero-image"
-          style={{
-            objectFit: 'cover',
-            filter: 'brightness(40%) contrast(85%)',
-          }}
-        />
-        <div className="hero-content">
-          <h1 className="hero-title">
-            Virginia Tech Digital Libraries
-          </h1>
-        </div>
+    <div className={styles.homeWrapper}>
+      {/* Title Section */}
+      <div className={styles.titleSection}>
+        <h1 className={styles.mainTitle}>{siteTitle}</h1>
+        <p className={styles.introText}>
+          Explore the extensive digital collections in the Virginia Tech University Digital Libraries Platform. 
+          These collections range from 3D Insect Collection and Minerva stories to local collections such as 
+          Salem Fire Department and Blacksburg Yearbooks. Explore and learn about the Virginia Tech Digital 
+          Libraries Platform.
+        </p>
       </div>
 
-      {/* Search Bar Section */}
-      <div className="search-container">
-        <div className="search-wrapper">
+      {/* Search Section */}
+      <div className={styles.searchSection}>
+        <h2 className={styles.sectionTitle}>Search the Platform</h2>
+        <div className={styles.searchBar}>
           <input 
             type="text"
             placeholder="Search by keyword, title, description"
-            className="search-input"
+            className={styles.searchInput}
           />
-          <select className="search-select">
+          <select className={styles.searchSelect}>
             <option>All</option>
           </select>
-          <button className="search-button">
-            Search
+          <button className={styles.searchButton}>
+            🔍
           </button>
         </div>
       </div>
 
-      {/* Browse Collections Section */}
-      <div className="browse-section">
-        <div className="container">
-          <h2 className="section-title">Browse Our Collections</h2>
-          <p className="section-description">
-            Explore our digital archives, special collections, and institutional repositories
-          </p>
+      {/* Recent Collections */}
+      <div className={styles.recentSection}>
+        <div className={styles.sectionHeader}>
+          <h2 className={styles.sectionTitle}>Recent Collections</h2>
+          <Link href="/search" className={styles.viewAllLink}>
+            View All Items
+          </Link>
+          <Link href="/collections" className={styles.viewAllLink}>
+            View All Collections
+          </Link>
+        </div>
+        
+        <div className={styles.collectionsContainer}>
+          <ul className={styles.collectionBubbles}>
+            {recentCollections.map((collection) => (
+              <li key={collection.id} className={styles.bubble}>
+                <Link href={`/collection/${collection.custom_key}`} className={styles.bubbleLink}>
+                  {collection.thumbnail_path ? (
+                    <img 
+                      src={collection.thumbnail_path} 
+                      alt={collection.title}
+                      className={styles.bubbleImage}
+                    />
+                  ) : (
+                    <div className={styles.bubblePlaceholder}>
+                      <span className={styles.bubbleText}>{collection.title?.substring(0, 2) || '??'}</span>
+                    </div>
+                  )}
+                </Link>
+              </li>
+            ))}
+          </ul>
           
-          <div className="browse-grid">
-            {/* Collections Card */}
-            <div className="browse-card">
-              <div className="icon-circle">
-                <span className="icon">📚</span>
-              </div>
-              <h3 className="card-title">Collections</h3>
-              <p className="card-description">
-                Browse through our curated digital collections and archives
-              </p>
-              <Link href="/collections" className="card-link">
-                View Collections →
-              </Link>
-            </div>
-
-            {/* Maps Card */}
-            <div className="browse-card">
-              <div className="icon-circle">
-                <span className="icon">🗺️</span>
-              </div>
-              <h3 className="card-title">Maps</h3>
-              <p className="card-description">
-                Explore historical and contemporary maps from our collection
-              </p>
-              <Link href="/browse/maps" className="card-link">
-                Browse Maps →
-              </Link>
-            </div>
-
-            {/* Formats Card */}
-            <div className="browse-card">
-              <div className="icon-circle">
-                <span className="icon">📁</span>
-              </div>
-              <h3 className="card-title">Formats</h3>
-              <p className="card-description">
-                Search library of formats that can be found in our digital repository
-              </p>
-              <Link href="/about/formats" className="card-link">
-                View Formats →
-              </Link>
-            </div>
-
-            {/* Organizations Card */}
-            <div className="browse-card">
-              <div className="icon-circle">
-                <span className="icon">🏛️</span>
-              </div>
-              <h3 className="card-title">Organizations</h3>
-              <p className="card-description">
-                View searchable from archives, institutions and others
-              </p>
-              <Link href="/about/organizations" className="card-link">
-                View Organizations →
-              </Link>
-            </div>
-          </div>
+          <Link href="/collections" className={styles.browseAllLink}>
+            <span className={styles.browseAllText}>Browse all collections</span>
+            <span className={styles.browseArrow}>→</span>
+          </Link>
         </div>
       </div>
-    </>
+
+      {/* Other Ways to Browse */}
+      <div className={styles.browseSection}>
+        <h2 className={styles.sectionTitle}>Other Ways to Explore</h2>
+        
+        <div className={styles.browseGrid}>
+          {/* Maps */}
+          <Link href="/maps" className={styles.browseCard}>
+            <div className={styles.iconCircle}>
+              <span className={styles.icon}>🗺️</span>
+            </div>
+            <div className={styles.cardContent}>
+              <h3 className={styles.cardTitle}>Maps</h3>
+              <p className={styles.cardDescription}>
+                Search the libraries collection of maps in our digital repository.
+              </p>
+            </div>
+          </Link>
+
+          {/* Formats */}
+          <Link href="/formats" className={styles.browseCard}>
+            <div className={styles.iconCircle}>
+              <span className={styles.icon}>📄</span>
+            </div>
+            <div className={styles.cardContent}>
+              <h3 className={styles.cardTitle}>Formats</h3>
+              <p className={styles.cardDescription}>
+                Search the array of formats that can be found in our digital repository.
+              </p>
+            </div>
+          </Link>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className={styles.footer}>
+        <p className={styles.footerText}>
+          This site is running commit <a href="#" className={styles.footerLink}>291bac5</a> of the{' '}
+          <a href="https://github.com/vt-digital-libraries-platform/vtdlp-access" className={styles.footerLink}>
+            vtdlp-access
+          </a>{' '}
+          project
+        </p>
+      </footer>
+    </div>
   )
 }

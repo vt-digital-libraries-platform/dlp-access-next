@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+set-eb-env.sh
 
 # vercel
 .vercel
@@ -39,3 +40,27 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# AWS/Amplify - SENSITIVE FILES
+aws-exports.js
+src/aws-exports.js
+src/amplifyconfiguration.json
+amplifyconfiguration.json
+amplify/team-provider-info.json
+amplify/backend-config.json
+amplify/#current-cloud-backend/
+amplify/.config/
+amplify/.awscloudformation/
+amplify/.temp/
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# IDE
+.vscode/
+.idea/
+
+# Documentation (temporary working files)
+PROJECT_STRUCTURE_EXPLAINED.md
