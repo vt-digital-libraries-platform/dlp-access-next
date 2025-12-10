@@ -125,10 +125,25 @@ jobs:
           APP_VERSION: ${{env.EB_ENV}}-${{env.COMMIT_HASH}}
         run: |
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_OUTPUT
-          aws elasticbeanstalk create-application-version \
+          
+          # Check if application version already exists
+          set +e
+          EXISTING=$(aws elasticbeanstalk describe-application-versions \
             --application-name ${{env.EB_APP}} \
-            --version-label $APP_VERSION \
-            --source-bundle S3Bucket=${{env.EB_S3_BUCKET}},S3Key=${{env.EB_APP}}/app-${{ env.COMMIT_HASH }}.zip
+            --version-labels $APP_VERSION \
+            --query "ApplicationVersions[?VersionLabel=='${APP_VERSION}'].VersionLabel" \
+            --output text 2>/dev/null)
+          set -e
+          
+          if [ "$EXISTING" = "$APP_VERSION" ]; then
+            echo "Application version ${APP_VERSION} already exists. Skipping creation."
+          else
+            echo "Creating new application version ${APP_VERSION}..."
+            aws elasticbeanstalk create-application-version \
+              --application-name ${{env.EB_APP}} \
+              --version-label $APP_VERSION \
+              --source-bundle S3Bucket=${{env.EB_S3_BUCKET}},S3Key=${{env.EB_APP}}/app-${{ env.COMMIT_HASH }}.zip
+          fi
 
       - name: Update/deploy environment
         run: |
