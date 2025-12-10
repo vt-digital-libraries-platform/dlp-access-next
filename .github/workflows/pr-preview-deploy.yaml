@@ -102,7 +102,14 @@ jobs:
             "Logging": "/var/log/app",
             "Environment": [
               { "Name": "HOSTNAME", "Value": "0.0.0.0" },
-              { "Name": "PORT", "Value": "3000" }
+              { "Name": "PORT", "Value": "3000" },
+              { "Name": "NEXT_PUBLIC_AWS_PROJECT_REGION", "Value": "${{secrets.NEXT_PUBLIC_AWS_PROJECT_REGION}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_REGION", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_REGION}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_API_KEY", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_API_KEY}}" },
+              { "Name": "NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID", "Value": "${{secrets.NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID}}" },
+              { "Name": "NEXT_PUBLIC_AWS_COGNITO_REGION", "Value": "${{secrets.NEXT_PUBLIC_AWS_COGNITO_REGION}}" }
             ]
           }
           JSON
