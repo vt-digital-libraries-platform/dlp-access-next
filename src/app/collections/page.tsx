@@ -164,7 +164,7 @@ function CollectionCard({ collection }: { collection: any }) {
     : description
 
   return (
-    <Link href={`/collection/${customKey}`} className={styles.cardLink}>
+    <Link href={`/collection/${encodeURIComponent(customKey)}`} className={styles.cardLink}>
       <div className={styles.card}>
         {/* Thumbnail */}
         <div className={styles.thumbnailContainer}>

@@ -85,7 +85,7 @@ export default function HomePage() {
           <ul className={styles.collectionBubbles}>
             {recentCollections.map((collection) => (
               <li key={collection.id} className={styles.bubble}>
-                <Link href={`/collection/${collection.custom_key}`} className={styles.bubbleLink}>
+                <Link href={`/collection/${encodeURIComponent(collection.custom_key)}`} className={styles.bubbleLink}>
                   {collection.thumbnail_path ? (
                     <img 
                       src={collection.thumbnail_path} 

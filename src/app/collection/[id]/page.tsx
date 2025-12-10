@@ -18,7 +18,8 @@ import Link from 'next/link';
 export default function CollectionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const customKey = params.id as string;
+  // Decode the URL parameter in case it contains special characters (e.g., ark:/...)
+  const customKey = decodeURIComponent(params.id as string);
   const [mounted, setMounted] = useState(false);
 
   // Only run on client side

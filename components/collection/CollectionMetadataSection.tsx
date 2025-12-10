@@ -223,8 +223,8 @@ export const CollectionMetadataSection = ({ collection }: CollectionMetadataSect
             borderRadius: '4px'
           }}>
             {typeof window !== 'undefined' 
-              ? `${window.location.origin}/collection/${collection.custom_key}`
-              : `/collection/${collection.custom_key}`
+              ? `${window.location.origin}/collection/${encodeURIComponent(collection.custom_key)}`
+              : `/collection/${encodeURIComponent(collection.custom_key)}`
             }
           </div>
         </div>
