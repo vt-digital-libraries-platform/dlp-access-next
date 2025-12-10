@@ -87,7 +87,15 @@ jobs:
           REPOSITORY: ${{env.ECR_REPO}}
           IMAGE_TAG: ${{ env.COMMIT_HASH }}
         run: |
-          docker build -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
+          docker build \
+            --build-arg NEXT_PUBLIC_AWS_PROJECT_REGION="${{secrets.NEXT_PUBLIC_AWS_PROJECT_REGION}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_REGION="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_REGION}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_API_KEY="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_API_KEY}}" \
+            --build-arg NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID="${{secrets.NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID}}" \
+            --build-arg NEXT_PUBLIC_AWS_COGNITO_REGION="${{secrets.NEXT_PUBLIC_AWS_COGNITO_REGION}}" \
+            -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
       - name: Create Dockerrun.aws.json
@@ -125,7 +133,7 @@ jobs:
           APP_VERSION: ${{env.EB_ENV}}-${{env.COMMIT_HASH}}
         run: |
           echo "APP_VERSION=${APP_VERSION}" >> $GITHUB_OUTPUT
-          
+
           # Check if application version already exists
           set +e
           EXISTING=$(aws elasticbeanstalk describe-application-versions \
@@ -134,7 +142,7 @@ jobs:
             --query "ApplicationVersions[?VersionLabel=='${APP_VERSION}'].VersionLabel" \
             --output text 2>/dev/null)
           set -e
-          
+
           if [ "$EXISTING" = "$APP_VERSION" ]; then
             echo "Application version ${APP_VERSION} already exists. Skipping creation."
           else
