@@ -53,6 +53,9 @@ amplify/.config/
 amplify/.awscloudformation/
 amplify/.temp/
 
+# EB
+Dockerrun.aws.json
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
