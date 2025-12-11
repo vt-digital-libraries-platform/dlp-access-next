@@ -64,3 +64,4 @@ amplify/.temp/
 
 # Documentation (temporary working files)
 PROJECT_STRUCTURE_EXPLAINED.md
+DYNAMODB_COPY_GUIDE.md
