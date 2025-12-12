@@ -2,13 +2,16 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { getSite, getBrowseCollections } from '@/lib'
+import { getSite, getBrowseCollections, getPageContent } from '@/lib'
 import styles from './page.module.scss'
 
 // Client Component - Amplify works on client side only
 export default function HomePage() {
   const [siteTitle, setSiteTitle] = useState('Virginia Tech University Digital Libraries Platform')
   const [recentCollections, setRecentCollections] = useState<any[]>([])
+  const [mapsContent, setMapsContent] = useState<string>('')
+  const [formatsContent, setFormatsContent] = useState<string>('')
+  const [isFormatsExpanded, setIsFormatsExpanded] = useState(false)
   
   useEffect(() => {
     const fetchData = async () => {
@@ -30,6 +33,18 @@ export default function HomePage() {
         
         if (collections?.items) {
           setRecentCollections(collections.items)
+        }
+
+        // Fetch Maps content
+        const maps = await getPageContent('7857a765-0cf1-44fd-b24a-6cc354b8e142')
+        if (maps?.content) {
+          setMapsContent(maps.content)
+        }
+
+        // Fetch Formats content
+        const formats = await getPageContent('3ea75641-e5cd-45ba-a459-0519512a9068')
+        if (formats?.content) {
+          setFormatsContent(formats.content)
         }
       } catch (error) {
         console.error('Failed to fetch data:', error)
@@ -113,32 +128,55 @@ export default function HomePage() {
       <div className={styles.browseSection}>
         <h2 className={styles.sectionTitle}>Other Ways to Explore</h2>
         
-        <div className={styles.browseGrid}>
+        <div className={styles.exploreGrid}>
           {/* Maps */}
-          <Link href="/maps" className={styles.browseCard}>
-            <div className={styles.iconCircle}>
-              <span className={styles.icon}>🗺️</span>
+          <div className={styles.exploreCard}>
+            <div className={styles.exploreHeader}>
+              <div className={styles.iconCircle}>
+                <span className={styles.icon}>🗺️</span>
+              </div>
+              <h3 className={styles.exploreTitle}>Maps</h3>
             </div>
-            <div className={styles.cardContent}>
-              <h3 className={styles.cardTitle}>Maps</h3>
-              <p className={styles.cardDescription}>
-                Search the libraries collection of maps in our digital repository.
-              </p>
+            <div className={styles.exploreContent}>
+              {mapsContent ? (
+                <div dangerouslySetInnerHTML={{ __html: mapsContent }} />
+              ) : (
+                <p>Explore geographic data and spatial visualizations in our digital collections.</p>
+              )}
             </div>
-          </Link>
+            <Link href="/maps" className={styles.exploreLink}>
+              View Maps Collection →
+            </Link>
+          </div>
 
           {/* Formats */}
-          <Link href="/formats" className={styles.browseCard}>
-            <div className={styles.iconCircle}>
-              <span className={styles.icon}>📄</span>
+          <div className={styles.exploreCard}>
+            <div className={styles.exploreHeader}>
+              <div className={styles.iconCircle}>
+                <span className={styles.icon}>📄</span>
+              </div>
+              <h3 className={styles.exploreTitle}>Formats</h3>
             </div>
-            <div className={styles.cardContent}>
-              <h3 className={styles.cardTitle}>Formats</h3>
-              <p className={styles.cardDescription}>
-                Search the array of formats that can be found in our digital repository.
-              </p>
+            <div className={styles.exploreContent}>
+              {formatsContent ? (
+                <>
+                  <div 
+                    className={`${styles.formatsCollapsible} ${isFormatsExpanded ? styles.expanded : ''}`}
+                    dangerouslySetInnerHTML={{ __html: formatsContent }} 
+                  />
+                  <button 
+                    onClick={() => setIsFormatsExpanded(!isFormatsExpanded)}
+                    className={styles.toggleButton}
+                    aria-expanded={isFormatsExpanded}
+                  >
+                    {isFormatsExpanded ? '▲ Show Less' : '▼ Show All Formats'}
+                  </button>
+                </>
+              ) : (
+                <p>Browse digital collections by resource format and type.</p>
+              )}
             </div>
-          </Link>
+          </div>
         </div>
       </div>
 

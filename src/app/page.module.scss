@@ -248,6 +248,136 @@ $hokieOrange: #e87722;
   color: #666;
 }
 
+// Explore Cards (Maps & Formats with content)
+.exploreGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.exploreCard {
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem;
+  transition: box-shadow 0.3s ease;
+  
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+}
+
+.exploreHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid $hokieOrange;
+}
+
+.exploreTitle {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+.exploreContent {
+  margin-bottom: 1.5rem;
+  color: #555;
+  line-height: 1.6;
+  
+  h2 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: $hokieMaroon;
+    margin-top: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+    font-size: 0.9375rem;
+  }
+  
+  ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1rem;
+    
+    li {
+      margin-bottom: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+  }
+}
+
+.exploreLink {
+  display: inline-block;
+  color: $hokieOrange;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  
+  &:hover {
+    color: $hokieMaroon;
+    text-decoration: underline;
+  }
+}
+
+.formatsCollapsible {
+  max-height: 200px;
+  overflow: hidden;
+  position: relative;
+  transition: max-height 0.4s ease;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,1));
+    pointer-events: none;
+  }
+  
+  &.expanded {
+    max-height: 2000px;
+    
+    &::after {
+      display: none;
+    }
+  }
+}
+
+.toggleButton {
+  display: block;
+  width: 100%;
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+  background: white;
+  border: 2px solid $hokieOrange;
+  border-radius: 6px;
+  color: $hokieOrange;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: $hokieOrange;
+    color: white;
+  }
+  
+  &:focus {
+    outline: 2px solid $hokieMaroon;
+    outline-offset: 2px;
+  }
+}
+
 .footer {
   margin-top: 4rem;
   padding: 2rem 0;
@@ -270,7 +400,8 @@ $hokieOrange: #e87722;
 }
 
 @media (max-width: 768px) {
-  .browseGrid {
+  .browseGrid,
+  .exploreGrid {
     grid-template-columns: 1fr;
   }
   
@@ -279,6 +410,11 @@ $hokieOrange: #e87722;
   }
   
   .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .exploreHeader {
     flex-direction: column;
     align-items: flex-start;
   }
