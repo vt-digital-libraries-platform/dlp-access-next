@@ -27,8 +27,8 @@ export default function MapsPage() {
         // Small delay to ensure Amplify is configured
         await new Promise(resolve => setTimeout(resolve, 100))
         
-        // Fetch maps page content
-        const maps = await getPageContent('maps')
+        // Fetch maps page content - Navigating Digital Collections through Mapping
+        const maps = await getPageContent('7857a765-0cf1-44fd-b24a-6cc354b8e142')
         if (maps?.content) {
           setMapsContent(maps.content)
         }

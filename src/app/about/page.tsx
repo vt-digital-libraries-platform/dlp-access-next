@@ -5,8 +5,8 @@
  * 
  * This page fetches:
  * - Site title from getSite()
- * - About page content from getPageContent('about')
- * - Team page content from getPageContent('team')
+ * - About page content (Virginia Tech Digital Libraries)
+ * - Team page content (VTDLP Core Team)
  * 
  * Displays placeholder content while loading and if AWS data is not available.
  */
@@ -21,8 +21,6 @@ export default function AboutPage() {
   const [siteTitle, setSiteTitle] = useState('Virginia Tech Digital Library')
   const [aboutContent, setAboutContent] = useState<string>('')
   const [teamContent, setTeamContent] = useState<string>('')
-  const [organizationsContent, setOrganizationsContent] = useState<string>('')
-  const [strategyContent, setStrategyContent] = useState<string>('')
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -39,28 +37,16 @@ export default function AboutPage() {
           setSiteTitle(site.title)
         }
         
-        // Fetch about page content
-        const about = await getPageContent('about')
+        // Fetch about page content - Virginia Tech Digital Libraries
+        const about = await getPageContent('ff19bffe-f848-4b99-afe0-d9794f4a4049')
         if (about?.content) {
           setAboutContent(about.content)
         }
         
-        // Fetch team page content
-        const team = await getPageContent('team')
+        // Fetch team page content - VTDLP Core Team
+        const team = await getPageContent('f20e72a7-601c-4daf-b70f-1afc7b39bba5')
         if (team?.content) {
           setTeamContent(team.content)
-        }
-        
-        // Fetch organizations page content
-        const organizations = await getPageContent('organizations')
-        if (organizations?.content) {
-          setOrganizationsContent(organizations.content)
-        }
-        
-        // Fetch digital collection strategy content
-        const strategy = await getPageContent('digital-collection-strategy')
-        if (strategy?.content) {
-          setStrategyContent(strategy.content)
         }
       } catch (error) {
         console.error('Error fetching about page data:', error)
@@ -110,40 +96,34 @@ export default function AboutPage() {
           {/* About Content from AWS */}
           <section className={styles.section}>
             {aboutContent ? (
-              <div dangerouslySetInnerHTML={{ __html: aboutContent }} />
+              <>
+                {/* Split content to insert Digital Collection Strategy link before Organizations section */}
+                <div dangerouslySetInnerHTML={{ 
+                  __html: aboutContent.split('<h2>Organizations').length > 1 
+                    ? aboutContent.split('<h2>Organizations')[0] 
+                    : aboutContent 
+                }} />
+                
+                {/* Digital Collection Strategy Link - Inserted after VT Digital Libraries, before Organizations */}
+                <div style={{ marginTop: '2rem', marginBottom: '2rem', padding: '1rem', backgroundColor: '#f5f5f5', borderLeft: '4px solid var(--hokieOrange)' }}>
+                  <p style={{ margin: 0 }}>
+                    <strong>Learn More:</strong> To understand our approach to building and managing digital collections, 
+                    please see our <Link href="/about/digital-collection-strategy" style={{ color: 'var(--hokieOrange)', textDecoration: 'underline', fontWeight: 'bold' }}>Digital Collection Strategy</Link>.
+                  </p>
+                </div>
+                
+                {/* Organizations section (if it exists) */}
+                {aboutContent.split('<h2>Organizations').length > 1 && (
+                  <div dangerouslySetInnerHTML={{ 
+                    __html: '<h2>Organizations' + aboutContent.split('<h2>Organizations')[1] 
+                  }} />
+                )}
+              </>
             ) : (
               <>
                 <h2>About</h2>
                 <p>
-                  <em>No about content available. Content should be loaded from AWS DynamoDB via getPageContent('about').</em>
-                </p>
-              </>
-            )}
-          </section>
-
-          {/* Organizations Section */}
-          <section id="organizations" className={styles.section}>
-            {organizationsContent ? (
-              <div dangerouslySetInnerHTML={{ __html: organizationsContent }} />
-            ) : (
-              <>
-                <h2>Organizations</h2>
-                <p>
-                  <em>No organizations content available. Content should be loaded from AWS DynamoDB via getPageContent('organizations').</em>
-                </p>
-              </>
-            )}
-          </section>
-
-          {/* Digital Collection Strategy Section */}
-          <section id="digital-collection-strategy" className={styles.section}>
-            {strategyContent ? (
-              <div dangerouslySetInnerHTML={{ __html: strategyContent }} />
-            ) : (
-              <>
-                <h2>Digital Collection Strategy</h2>
-                <p>
-                  <em>No digital collection strategy content available. Content should be loaded from AWS DynamoDB via getPageContent('digital-collection-strategy').</em>
+                  <em>No about content available. Content should be loaded from AWS DynamoDB.</em>
                 </p>
               </>
             )}
@@ -170,11 +150,10 @@ export default function AboutPage() {
           <div className={styles.quickLinks}>
             <h3>Quick Links</h3>
             <ul>
-              <li><Link href="/about/formats">Formats</Link></li>
-              <li><Link href="/about/organizations">Organizations</Link></li>
-              <li><Link href="/about/team">Team</Link></li>
+              <li><Link href="/about#team">Team</Link></li>
+              <li><Link href="/about/digital-collection-strategy">Digital Collection Strategy</Link></li>
               <li><Link href="/collections">Browse Collections</Link></li>
-              <li><Link href="/search">Search Archives</Link></li>
+              <li><Link href="/maps">Maps</Link></li>
             </ul>
           </div>
 
