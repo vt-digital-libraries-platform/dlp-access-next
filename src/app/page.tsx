@@ -11,6 +11,7 @@ export default function HomePage() {
   const [recentCollections, setRecentCollections] = useState<any[]>([])
   const [mapsContent, setMapsContent] = useState<string>('')
   const [formatsContent, setFormatsContent] = useState<string>('')
+  const [formatsContentWithLinks, setFormatsContentWithLinks] = useState<string>('')
   const [isFormatsExpanded, setIsFormatsExpanded] = useState(false)
   
   useEffect(() => {
@@ -45,6 +46,35 @@ export default function HomePage() {
         const formats = await getPageContent('3ea75641-e5cd-45ba-a459-0519512a9068')
         if (formats?.content) {
           setFormatsContent(formats.content)
+          
+          // Convert list items to clickable facet links
+          if (typeof window !== 'undefined' && window.DOMParser) {
+            const parser = new DOMParser()
+            const doc = parser.parseFromString(formats.content, 'text/html')
+            const listItems = doc.querySelectorAll('ul li')
+            
+            listItems.forEach(li => {
+              const text = li.textContent?.trim() || ''
+              if (text) {
+                const link = document.createElement('a')
+                link.href = `https://digital.lib.vt.edu/search?q=&field=all&view=gallery&format=${encodeURIComponent(text)}`
+                link.target = '_blank'
+                link.rel = 'noopener noreferrer'
+                link.title = `Search for format = ${text}`
+                link.textContent = text
+                link.style.color = '#e87722'
+                link.style.textDecoration = 'none'
+                link.style.fontWeight = '500'
+                
+                li.textContent = ''
+                li.appendChild(link)
+              }
+            })
+            
+            setFormatsContentWithLinks(doc.body.innerHTML)
+          } else {
+            setFormatsContentWithLinks(formats.content)
+          }
         }
       } catch (error) {
         console.error('Failed to fetch data:', error)
@@ -158,11 +188,11 @@ export default function HomePage() {
               <h3 className={styles.exploreTitle}>Formats</h3>
             </div>
             <div className={styles.exploreContent}>
-              {formatsContent ? (
+              {formatsContentWithLinks ? (
                 <>
                   <div 
                     className={`${styles.formatsCollapsible} ${isFormatsExpanded ? styles.expanded : ''}`}
-                    dangerouslySetInnerHTML={{ __html: formatsContent }} 
+                    dangerouslySetInnerHTML={{ __html: formatsContentWithLinks }} 
                   />
                   <button 
                     onClick={() => setIsFormatsExpanded(!isFormatsExpanded)}

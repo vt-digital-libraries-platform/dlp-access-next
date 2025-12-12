@@ -310,6 +310,23 @@ $hokieOrange: #e87722;
       margin-bottom: 0.5rem;
       font-size: 0.875rem;
       line-height: 1.5;
+      
+      a {
+        color: $hokieOrange;
+        text-decoration: none;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        
+        &:hover {
+          color: $hokieMaroon;
+          text-decoration: underline;
+        }
+        
+        &:focus {
+          outline: 2px solid $hokieMaroon;
+          outline-offset: 2px;
+        }
+      }
     }
   }
 }
