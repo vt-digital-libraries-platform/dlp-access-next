@@ -1,0 +1,56 @@
+// Maps Page Styles
+$hokieMaroon: #630031;
+$hokieOrange: #e87722;
+$darkGray: #666;
+$lighterGray: #f8f8f8;
+$borderGray: #e0e0e0;
+
+.mapsPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.pageHeader {
+  margin-bottom: 2rem;
+  
+  .breadcrumbs {
+    font-size: 0.9rem;
+    color: $darkGray;
+    margin-bottom: 1rem;
+    
+    a {
+      color: $hokieOrange;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    span {
+      color: $hokieMaroon;
+      font-weight: 600;
+    }
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: $hokieMaroon;
+    margin: 0;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid $hokieOrange;
+  }
+}
+
+.pageContent {
+  line-height: 1.6;
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  em {
+    color: $darkGray;
+  }
+}
