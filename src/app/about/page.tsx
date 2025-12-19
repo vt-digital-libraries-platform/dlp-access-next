@@ -84,71 +84,16 @@ export default function AboutPage() {
           <section className={styles.section}>
             {aboutContent ? (
               <>
-                {/* Partners and Affiliates Section */}
-                <div style={{ marginBottom: '2rem' }}>
-                  <h2>Virginia Tech Digital Library Partners and Affiliates (new content)</h2>
-                  <p>
-                    The Digital Library team collaborates with a range of partners and affiliates,
-                    both within and beyond the Commonwealth of Virginia, on numerous collections.
-                    These collections vary in size from a small number of digital objects to thousands
-                    of digital objects. Below are a few examples of our Virginia Tech–based partners
-                    and affiliates:
-                  </p>
-                  <ul style={{ marginTop: '1rem', lineHeight: '1.8' }}>
-                    <li>
-                      <a
-                        href="https://vtechworks.lib.vt.edu/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'var(--hokieOrange)', textDecoration: 'underline' }}
-                      >
-                        VTechWorks
-                      </a> - Virginia Tech's Institutional Repository
-                    </li>
-                    <li>
-                      <a
-                        href="https://iawa.lib.vt.edu/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'var(--hokieOrange)', textDecoration: 'underline' }}
-                      >
-                        IAWA
-                      </a> - International Archive of Women in Architecture
-                    </li>
-                    <li>
-                      <a
-                        href="https://www.montgomerymuseum.org/"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'var(--hokieOrange)', textDecoration: 'underline' }}
-                      >
-                        Montgomery Museum of Art &amp; History
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-
-                {/* Split content to insert Digital Collection Strategy link before Organizations section */}
-                <div dangerouslySetInnerHTML={{
-                  __html: (aboutContent.split('<h2>Organizations').length > 1
-                    ? aboutContent.split('<h2>Organizations')[0]
-                    : aboutContent
-                  ).replace(/<h2>Virginia Tech Digital Libraries<\/h2>/, '<h2>Virginia Tech Digital Libraries (old content)</h2>')
-                }} />
-                {/* Digital Collection Strategy Link - Inserted after VT Digital Libraries, before Organizations */}
+                {/* About Content from AWS - Virginia Tech Digital Libraries and Partners */}
+                <div dangerouslySetInnerHTML={{ __html: aboutContent }} />
+                
+                {/* Digital Collection Strategy Link - Inserted after Partners and Affiliates */}
                 <div style={{ marginTop: '2rem', marginBottom: '2rem', padding: '1rem', backgroundColor: '#F5F5F5', borderLeft: '4px solid var(--hokieOrange)' }}>
                   <p style={{ margin: 0 }}>
                     <strong>Learn More:</strong> To understand our approach to building and managing digital collections,
                     please see our <Link href="/about/digital-collection-strategy" style={{ color: 'var(--hokieOrange)', textDecoration: 'underline', fontWeight: 'bold' }}>Digital Collection Strategy</Link>.
                   </p>
                 </div>
-
-                {/* Organizations section (if it exists) */}
-                {aboutContent.split('<h2>Organizations').length > 1 && (
-                  <div dangerouslySetInnerHTML={{
-                    __html: '<h2>Organizations' + aboutContent.split('<h2>Organizations')[1]
-                  }} />
-                )}
               </>
             ) : (
               <>
