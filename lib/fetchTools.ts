@@ -53,7 +53,7 @@ export async function getBrowseCollections(
     limit: limit,
     nextToken: nextToken
   };
-  
+
   try {
     const response: any = await getClient().graphql({
       query: queries.searchCollections,
@@ -79,7 +79,7 @@ export async function searchItems(query: string, filters?: Record<string, any>) 
  */
 export async function getCollectionFromCustomKey(customKey: string | string[] | undefined) {
   if (!customKey || Array.isArray(customKey)) return null;
-  
+
   const options = {
     order: "ASC",
     limit: 1,
@@ -90,7 +90,7 @@ export async function getCollectionFromCustomKey(customKey: string | string[] | 
       }
     }
   };
-  
+
   try {
     const response: any = await getClient().graphql({
       query: queries.searchCollections,
@@ -111,9 +111,9 @@ export async function getTopLevelParentForCollection(collection: any) {
     // If no hierarchy, the collection itself is the top level
     return collection;
   }
-  
+
   const topLevelId = collection.heirarchy_path[0];
-  
+
   try {
     const response: any = await getClient().graphql({
       query: queries.getCollection,
@@ -166,7 +166,7 @@ export async function getCollectionItems(
       nextToken
     }
   }`;
-  
+
   try {
     const response: any = await getClient().graphql({
       query: queryGetCollectionItems,
