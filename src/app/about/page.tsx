@@ -106,19 +106,6 @@ export default function AboutPage() {
               </>
             )}
           </section>
-          {/* Team Section */}
-          <section id="team" className={styles.section}>
-            {teamContent ? (
-              <div dangerouslySetInnerHTML={{ __html: teamContent }} />
-            ) : (
-              <>
-                <h2>Team</h2>
-                <p>
-                  <em>No team content available. Content should be loaded from AWS DynamoDB via getPageContent('team').</em>
-                </p>
-              </>
-            )}
-          </section>
         </div>
         {/* Sidebar */}
         <aside className={styles.sidebar}>
@@ -126,8 +113,9 @@ export default function AboutPage() {
           <div className={styles.quickLinks}>
             <h3>Quick Links</h3>
             <ul>
-              <li><Link href="/about#team">Team</Link></li>
+              <li><Link href="/about#team">DLP Team</Link></li>
               <li><Link href="/about/digital-collection-strategy">Digital Collection Strategy</Link></li>
+              <li><Link href="/about/harmful-content-statement">Harmful Content Statement</Link></li>
               <li><Link href="/collections">Browse Collections</Link></li>
               <li><Link href="/maps">Maps</Link></li>
             </ul>

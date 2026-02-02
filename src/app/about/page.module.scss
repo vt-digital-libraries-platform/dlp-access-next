@@ -74,6 +74,29 @@ $borderGray: #e0e0e0;
       color: #333;
       margin-bottom: 1rem;
     }
+    
+    a {
+      color: #0066cc;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+        color: #0052a3;
+      }
+    }
+    
+    ul {
+      list-style: disc;
+      padding-left: 2rem;
+      margin-bottom: 1rem;
+      
+      li {
+        font-size: 1.05rem;
+        line-height: 1.8;
+        color: #333;
+        margin-bottom: 0.5rem;
+      }
+    }
   }
 }
 
