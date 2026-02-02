@@ -113,7 +113,7 @@ export default function AboutPage() {
           <div className={styles.quickLinks}>
             <h3>Quick Links</h3>
             <ul>
-              <li><Link href="/about#team">DLP Team</Link></li>
+              <li><Link href="/about/team">DLP Team</Link></li>
               <li><Link href="/about/digital-collection-strategy">Digital Collection Strategy</Link></li>
               <li><Link href="/about/harmful-content-statement">Harmful Content Statement</Link></li>
               <li><Link href="/collections">Browse Collections</Link></li>

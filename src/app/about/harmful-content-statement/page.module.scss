@@ -19,6 +19,78 @@ $borderGray: #e0e0e0;
   }
 }
 
+.pageContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  
+  @media (min-width: 992px) {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.mainContent {
+  min-width: 0;
+}
+
+// Sidebar Styles
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.quickLinks,
+.organizationInfo {
+  background: $lighterGray;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid $hokieOrange;
+  
+  h3 {
+    font-size: 1.25rem;
+    color: $hokieMaroon;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+}
+
+.quickLinks {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      margin-bottom: 0.75rem;
+      
+      a {
+        color: $hokieMaroon;
+        text-decoration: none;
+        transition: color 0.2s;
+        
+        &:hover {
+          color: $hokieOrange;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.orgName {
+  font-weight: 600;
+  color: $hokieMaroon;
+  margin-bottom: 0.5rem;
+}
+
+.orgDescription {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: $darkGray;
+  margin: 0;
+}
+
 .breadcrumbs {
   font-size: 0.9rem;
   color: $darkGray;

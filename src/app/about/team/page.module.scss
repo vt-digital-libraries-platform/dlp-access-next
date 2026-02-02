@@ -40,6 +40,119 @@ $hokieOrange: #e87722;
   margin-top: 2rem;
 }
 
+.pageContent {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  
+  @media (min-width: 992px) {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.mainContent {
+  min-width: 0;
+}
+
+// Sidebar Styles
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.quickLinks,
+.organizationInfo {
+  background: #f8f8f8;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid $hokieOrange;
+  
+  h3 {
+    font-size: 1.25rem;
+    color: $hokieMaroon;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+}
+
+.quickLinks {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      margin-bottom: 0.75rem;
+      
+      a {
+        color: $hokieMaroon;
+        text-decoration: none;
+        transition: color 0.2s;
+        
+        &:hover {
+          color: $hokieOrange;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.orgName {
+  font-weight: 600;
+  color: $hokieMaroon;
+  margin-bottom: 0.5rem;
+}
+
+.orgDescription {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: #666;
+  margin: 0;
+}
+
+.content {
+  h1 {
+    font-size: 2.5rem;
+    color: $hokieMaroon;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid $hokieOrange;
+  }
+
+  h2 {
+    font-size: 1.75rem;
+    color: $hokieMaroon;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e0e0e0;
+  }
+
+  p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 1rem;
+  }
+
+  a {
+    color: #0066cc;
+    text-decoration: none;
+    
+    &:hover {
+      text-decoration: underline;
+      color: #0052a3;
+    }
+  }
+
+  strong {
+    color: $hokieMaroon;
+    font-weight: 600;
+  }
+}
+
 .intro {
   font-size: 1.1rem;
   line-height: 1.8;

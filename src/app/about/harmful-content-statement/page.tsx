@@ -56,9 +56,11 @@ export default function HarmfulContentStatementPage() {
         <Link href="/">Home</Link> / <Link href="/about">About</Link> / <span>Harmful Content Statement</span>
       </div>
 
-      <h1>Statement on Potentially Offensive and Harmful Content</h1>
+      <div className={styles.pageContent}>
+        <div className={styles.mainContent}>
+          <h1>Statement on Potentially Offensive and Harmful Content</h1>
 
-      <div className={styles.content}>
+          <div className={styles.content}>
         {content ? (
           <div dangerouslySetInnerHTML={{ __html: content }} />
         ) : (
@@ -96,6 +98,32 @@ export default function HarmfulContentStatementPage() {
             </p>
           </>
         )}
+          </div>
+        </div>
+        
+        {/* Sidebar */}
+        <aside className={styles.sidebar}>
+          {/* Quick Links */}
+          <div className={styles.quickLinks}>
+            <h3>Quick Links</h3>
+            <ul>
+              <li><Link href="/about/team">DLP Team</Link></li>
+              <li><Link href="/about/digital-collection-strategy">Digital Collection Strategy</Link></li>
+              <li><Link href="/about/harmful-content-statement">Harmful Content Statement</Link></li>
+              <li><Link href="/collections">Browse Collections</Link></li>
+              <li><Link href="/maps">Maps</Link></li>
+            </ul>
+          </div>
+          {/* Organization Info */}
+          <div className={styles.organizationInfo}>
+            <h3>Organization</h3>
+            <p className={styles.orgName}>Virginia Tech University Libraries</p>
+            <p className={styles.orgDescription}>
+              Part of Virginia Tech's mission to provide access to knowledge and
+              support research and learning.
+            </p>
+          </div>
+        </aside>
       </div>
     </div>
   )
