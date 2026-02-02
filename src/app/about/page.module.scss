@@ -60,6 +60,14 @@ $borderGray: #e0e0e0;
   .section {
     margin-bottom: 3rem;
     
+    h1 {
+      font-size: 2.5rem;
+      color: $hokieMaroon;
+      margin: 0 0 1.5rem 0;
+      padding-bottom: 1rem;
+      border-bottom: 3px solid $hokieOrange;
+    }
+    
     h2 {
       font-size: 1.75rem;
       color: $hokieMaroon;

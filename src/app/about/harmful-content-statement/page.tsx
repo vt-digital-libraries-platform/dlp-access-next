@@ -58,46 +58,8 @@ export default function HarmfulContentStatementPage() {
 
       <div className={styles.pageContent}>
         <div className={styles.mainContent}>
-          <h1>Statement on Potentially Offensive and Harmful Content</h1>
-
           <div className={styles.content}>
-        {content ? (
-          <div dangerouslySetInnerHTML={{ __html: content }} />
-        ) : (
-          <>
-            <p className={styles.fallback}>
-              The University Libraries at Virginia Tech provides preservation and access to a wide range of materials spanning several centuries. The Digital Library Platform includes historical records, cultural heritage materials, and other research objects such as biospecimens. These materials are available in a variety of formats to promote and enrich the scholarship of researchers, students, and community members.
-            </p>
-
-            <h2>Why are historical content available on this site?</h2>
-            <p className={styles.fallback}>
-              University Libraries acknowledges that the recording of history has never been a neutral act. Historical records and cultural heritage materials often reflect the biases, prejudices, and dominant ideologies of their time. As a result, some materials contain harmful or inaccurate representations of marginalized groups.
-            </p>
-            <p className={styles.fallback}>
-              We recognize that some content—including language, imagery, or context—may be harmful, offensive, inaccurate, or challenging to engage with. While University Libraries does not condone or support discrimination or derogatory language of any kind, items in the Digital Library Platform are presented in their original state. This aligns with cultural heritage best practices and preserves the integrity of historical records for future research.
-            </p>
-
-            <h2>How are historical content identified as harmful or contains offensive language?</h2>
-            <p className={styles.fallback}>
-              Within the site if a collection or at the item level items have been identified as follows when and if it contains harmful or offensive language:
-            </p>
-            <p className={styles.fallback}>
-              The University Libraries at Virginia Tech recognizes that some issues of the [collection name] contain offensive content that does not reflect the University's <a href="https://www.inclusive.vt.edu/Programs/vtpoc0.html" target="_blank" rel="noopener noreferrer">"Principles of Community"</a>
-            </p>
-            <p className={styles.fallback}>
-              The University Libraries present the following content in its original and unaltered form for the purpose of research, study, and personal reading. Providing online access to these historical records does not endorse any attitudes, prejudices, or behaviors depicted in the digital content. The University Libraries is committed to upholding the principle of equal and free access to unaltered historical information and supports the University's <a href="https://vtx.vt.edu/campus-news/statements/unirel-statement-040919.html" target="_blank" rel="noopener noreferrer">statement on offensive photographs</a>.
-            </p>
-
-            <h2>Contact Us</h2>
-            <p className={styles.fallback}>
-              If you have questions or concerns about a collection or policy listed above please feel free to contact us: <a href="mailto:digital-libraries@vt.edu">digital-libraries@vt.edu</a>
-            </p>
-
-            <p className={styles.notice}>
-              <em>Note: This content will be loaded from the database once the page content is added to DynamoDB.</em>
-            </p>
-          </>
-        )}
+            <div dangerouslySetInnerHTML={{ __html: content }} />
           </div>
         </div>
         

@@ -2,23 +2,61 @@
 
 /**
  * Digital Collection Strategy Page
- * 
- * Placeholder page to be filled with content about the digital collection strategy.
+ * Fetches content from AWS DynamoDB
  */
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { getPageContent } from '@/lib'
 import styles from '../page.module.scss'
 
 export default function DigitalCollectionStrategyPage() {
-  const [mounted, setMounted] = useState(false)
+  const [content, setContent] = useState<string>('')
+  const [loading, setLoading] = useState<boolean>(true)
+  const [mounted, setMounted] = useState<boolean>(false)
 
-  useState(() => {
+  useEffect(() => {
     setMounted(true)
-  })
+  }, [])
+
+  useEffect(() => {
+    if (!mounted) return
+
+    async function fetchData() {
+      try {
+        setLoading(true)
+        // Digital Collection Strategy page content
+        const data = await getPageContent('c59ab8c6-b0e4-4e86-91e8-96b9bd417448')
+        if (data?.content) {
+          setContent(data.content)
+        }
+      } catch (error) {
+        console.error('Error loading digital collection strategy content:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchData()
+  }, [mounted])
 
   if (!mounted) {
     return null
+  }
+
+  if (loading) {
+    return (
+      <div className={styles.aboutPage}>
+        <div className={styles.aboutHeader}>
+          <div className={styles.breadcrumbs}>
+            <Link href="/">Home</Link> / <Link href="/about">About</Link> / <span>Loading...</span>
+          </div>
+          <h1>Loading...</h1>
+        </div>
+        <div className={styles.aboutContent}>
+          <p>Loading content...</p>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -28,21 +66,13 @@ export default function DigitalCollectionStrategyPage() {
         <div className={styles.breadcrumbs}>
           <Link href="/">Home</Link> / <Link href="/about">About</Link> / <span>Digital Collection Strategy</span>
         </div>
-        <h1>Digital Collection Strategy</h1>
       </div>
 
       <div className={styles.aboutContent}>
         {/* Main Content */}
         <div className={styles.mainContent}>
           <section className={styles.section}>
-            <h2>Overview</h2>
-            <p>
-              <em>Content for Digital Collection Strategy page will be added here.</em>
-            </p>
-            <p>
-              This page will outline the strategic approach for building, managing, and sustaining 
-              digital collections within the Virginia Tech Digital Libraries Platform.
-            </p>
+            <div dangerouslySetInnerHTML={{ __html: content }} />
           </section>
         </div>
 
