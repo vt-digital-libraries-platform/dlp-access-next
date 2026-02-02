@@ -32,6 +32,8 @@ export default function AboutPage() {
         }
         // Fetch about page content - Virginia Tech Digital Libraries
         const about = await getPageContent('ff19bffe-f848-4b99-afe0-d9794f4a4049')
+        console.log('📊 ABOUT DATA:', about)  // ← Add this
+        console.log('📝 CONTENT:', about?.content)  // ← And this
         if (about?.content) {
           setAboutContent(about.content)
         }
