@@ -72,8 +72,8 @@ export default function HarmfulContentStatementPage() {
               <li><Link href="/about/team">DLP Team</Link></li>
               <li><Link href="/about/digital-collection-strategy">Digital Collection Strategy</Link></li>
               <li><Link href="/about/harmful-content-statement">Harmful Content Statement</Link></li>
-              <li><Link href="/collections">Browse Collections</Link></li>
               <li><Link href="/maps">Maps</Link></li>
+              <li><Link href="/collections">Browse Collections</Link></li>
             </ul>
           </div>
           {/* Organization Info */}
