@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-// import Header from "@/app/_components/header/header";
+import Header from "@/app/_components/header/header";
 import Footer from "@/app/_components/footer/footer";
 import "@/app/_styles/vars.css";
 import "@/app/_styles/global.css";
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* <Header /> */}
+        <Header />
         <main>
           {children}
         </main>
