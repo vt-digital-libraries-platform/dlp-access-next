@@ -1,0 +1,62 @@
+@media (prefers-color-scheme: dark) {
+  :root {
+    --backgroundColor: var(--vt-smoke-9s);
+    --textColor: var(--vt-smoke-7t);
+  }
+}
+
+html {
+  scrollbar-gutter: stable;
+  color-scheme: light dark;
+}
+
+body {
+  margin: 0;
+  font-family: var(--body_font-family);
+  color: var(--textColor);
+  background: var(--backgroundColor);
+  
+  display: grid;
+  grid-gap: 16px;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100svh;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: var(--focus_outline);
+  outline-offset: var(--focus-outline__offset);
+}
+
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: var(--focus-outline--input);
+}
+
+/* Show the input's focus ring on the wrapper instead of the input */
+.input-group {
+  &:focus-within {
+    outline: var(--focus-outline--input);
+    outline-offset: var(--focus-outline__offset);
+  }
+  &:focus-visible {
+    outline: none;
+  }
+}
