@@ -52,11 +52,13 @@ textarea:focus-visible {
 
 /* Show the input's focus ring on the wrapper instead of the input */
 .input-group {
+
   &:focus-within {
     outline: var(--focus-outline--input);
     outline-offset: var(--focus-outline__offset);
   }
-  &:focus-visible {
+
+  & > input:focus-visible {
     outline: none;
   }
 }
