@@ -3,8 +3,9 @@
 
 import { useEffect, useRef } from "react";
 import Link from "next/link";
-import SearchBar from "@/app/_components/search/searchBar";
-import "./header.css";
+import SearchBar from "@/app/_components/search/SearchBar";
+import { HamburgerIcon, ChevronIcon } from "@/app/_components/icons/CustomIcons";
+import "./Header.css";
 
 type NavLink = {
   label: string;
@@ -22,32 +23,11 @@ const browseLinks: NavLink[] = [
 
 const aboutLinks: NavLink[] = [
   { label: "About Us", href: "/about" },
-  { label: "About the Digital Library Platform", href: "/about/platform" },
   { label: "Accessibility", href: "/accessibility" },
-  { label: "Feedback", href: "/about/contact-us" },
-  { label: "Metadata Guide", href: "/about/metadata-guide" },
+  { label: "Feedback", href: "/feedback" },
+  { label: "Metadata Guide", href: "/about/metadata" },
   { label: "Permissions", href: "/about/permissions" },
 ];
-
-// Two segments rather than one <path> so each can animate independently.
-function Chevron() {
-  return (
-    <svg className="chevron" viewBox="0 0 16 16" aria-hidden="true" focusable="false">
-      <line className="chevron-segment chevron-start" x1="3.5" y1="6" x2="8" y2="10.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <line className="chevron-segment chevron-end" x1="12.5" y1="6" x2="8" y2="10.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
-
-function HamburgerIcon() {
-  return (
-    <svg className="hamburger-icon" viewBox="0 0 20 16" aria-hidden="true" focusable="false">
-      <line className="line line-top" x1="1" y1="2" x2="19" y2="2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <line className="line line-middle" x1="1" y1="8" x2="19" y2="8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-      <line className="line line-bottom" x1="1" y1="14" x2="19" y2="14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  );
-}
 
 // "source" isn't typed in the shipped DOM lib yet; cast preserves the
 // implicit anchor link for script-opened popovers.
@@ -225,7 +205,7 @@ export default function Header() {
           <li>
             <button type="button" popoverTarget="browse-menu">
               Browse
-              <Chevron />
+              <ChevronIcon />
             </button>
             <ul id="browse-menu" popover="auto">
               {browseLinks.map((link) => (
@@ -239,7 +219,7 @@ export default function Header() {
           <li>
             <button type="button" popoverTarget="about-menu">
               About
-              <Chevron />
+              <ChevronIcon />
             </button>
             <ul id="about-menu" popover="auto">
               {aboutLinks.map((link) => (

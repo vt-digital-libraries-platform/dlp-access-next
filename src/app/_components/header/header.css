@@ -51,9 +51,8 @@
       }
     }
 
-    /* Search — placement only; the bar's styles live in searchBar.css. */
     .site-search {
-      /* The vw term is overflow headroom above the breakpoint, not a design width. */
+      /* Extra overflow above breakpoint */
       width: min(var(--search-max-width), 45vw);
     }
 
@@ -74,28 +73,6 @@
         min-block-size: var(--min-touch-target);
         border: 0;
         background: none;
-
-        /* Horizontal-only — any y term drops the finished chevron by that much. */
-        &:has(+ [popover]:popover-open) {
-          .chevron-start {
-            transform: translateX(4.5px);
-          }
-
-          .chevron-end {
-            transform: translateX(-4.5px);
-          }
-        }
-      }
-
-      .chevron {
-        width: calc(var(--icon-size) * 0.75);
-        height: calc(var(--icon-size) * 0.75);
-      }
-
-      .chevron-segment {
-        @media (prefers-reduced-motion: no-preference) {
-          transition: transform var(--transition-time--long) var(--transition-time-function);
-        }
       }
 
       /* Both right-align so the flip fallback can't fire on one and not the other. */
@@ -171,41 +148,10 @@
       background: transparent;
     }
 
-    .hamburger-icon {
-      width: calc(var(--icon-size) * 1.125);
-      height: calc(var(--icon-size) * 0.9);
-    }
-
-    .line {
-      transform-box: fill-box;
-      transform-origin: center;
-
-      @media (prefers-reduced-motion: no-preference) {
-        transition:
-          transform var(--transition-time--x-long) var(--transition-time-function),
-          opacity var(--transition-time--x-long) var(--transition-time-function);
-      }
-    }
-
-    .mobile-nav-toggle[aria-expanded="true"] {
-      .line-top {
-        transform: translateY(6px) rotate(45deg);
-      }
-
-      .line-middle {
-        opacity: 0;
-      }
-
-      .line-bottom {
-        transform: translateY(-6px) rotate(-45deg);
-      }
-    }
-
     .mobile-nav-menu {
       display: none;
       overflow: hidden;
 
-      /* Required for the 0fr collapse below. */
       .mobile-nav-menu-inner {
         min-height: 0;
       }
@@ -247,7 +193,6 @@
     @media screen and (max-width: max(48rem, 768px)) {
       /* column-gap must stay 0 or it stacks on top of the gutter tracks. */
       :scope {
-        /* Floored at the toggle's padding, which is pulled outward by that much. */
         --header-gutter: max(var(--toggle-padding), 3%);
         --icon-size: 1rem;
 
