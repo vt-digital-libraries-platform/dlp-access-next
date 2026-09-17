@@ -26,7 +26,7 @@ interface Props {
  * @returns BrowsePage which changes based on dynamic optional route segments: [[...slug]]
  */
 export default async function BrowsePage({ params }: Props) {
-  
+  // TODO: add handling for new browse type prop and resolve collisions with slug, slug takes priority
   const { slug } = await params;
   const browseType =
     Object.keys(BrowseTypes).includes(slug?.at(0))

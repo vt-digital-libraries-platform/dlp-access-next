@@ -29,14 +29,23 @@ const aboutLinks: NavLink[] = [
   { label: "Permissions", href: "/about/permissions" },
 ];
 
-// "source" isn't typed in the shipped DOM lib yet; cast preserves the
-// implicit anchor link for script-opened popovers.
+/**
+ * Preserve implicit anchor link for script-opened popovers for weird DOM edge cases
+ * 
+ * @param popover 
+ * @param source 
+ */
 function showPopoverAnchoredTo(popover: HTMLElement, source: HTMLElement) {
   (popover as HTMLElement & { showPopover(options?: { source?: Element }): void }).showPopover({ source });
 }
 
 // Double-gated on hover/pointer capability, so a touch tap's pointerenter
 // can't race its own click into open-then-close.
+/**
+ * 
+ * 
+ * @param headerRef 
+ */
 function useHoverToOpenDropdowns(headerRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const header = headerRef.current;
@@ -52,25 +61,39 @@ function useHoverToOpenDropdowns(headerRef: React.RefObject<HTMLElement | null>)
 
       const isOpen = () => panel.matches(":popover-open");
 
-      // :focus-visible keeps a tap from opening the panel a frame before its
-      // own click toggles it shut. relatedTarget keeps Escape's focus
-      // restoration from immediately reopening what Escape just closed.
+      /**
+       * Open a popover when its trigger gains the :focus-visible pseudo-class.
+       * 
+       * Handles colliding trigger events from touch inputs causing immediate focus change and 
+       * gracefully returns focus to the trigger on closure without re-triggering.
+       * 
+       * @param event FocusEvent "focus"
+       */
       const openOnFocus = (event: FocusEvent) => {
         if (event.relatedTarget instanceof Node && panel.contains(event.relatedTarget)) return;
         if (!trigger.matches(":focus-visible")) return;
         if (!isOpen()) showPopoverAnchoredTo(panel, trigger);
       };
 
+      /**
+       * Open the popover on trigger hover.
+       * 
+       * @param event PointerEvent "pointerenter"
+       */
       const openOnHover = (event: PointerEvent) => {
         if (event.pointerType !== "mouse") return;
         if (!isOpen()) showPopoverAnchoredTo(panel, trigger);
       };
 
       // Client-side navigation leaves the panel in the top layer otherwise.
+      // TODO: @kellyme Might be unecessary
       const closeOnLinkClick = (event: MouseEvent) => {
         if (event.target instanceof Element && event.target.closest("a") && isOpen()) panel.hidePopover();
       };
 
+      /**
+       * Collapse an open popover when it and its trigger aren't hovered and don't have focus
+       */
       const closeWhenInactive = () => {
         requestAnimationFrame(() => {
           const isHovered = trigger.matches(":hover") || panel.matches(":hover");
@@ -82,6 +105,7 @@ function useHoverToOpenDropdowns(headerRef: React.RefObject<HTMLElement | null>)
       trigger.addEventListener("focus", openOnFocus);
       item.addEventListener("focusout", closeWhenInactive);
       panel.addEventListener("click", closeOnLinkClick);
+
       cleanups.push(() => {
         trigger.removeEventListener("focus", openOnFocus);
         item.removeEventListener("focusout", closeWhenInactive);
@@ -92,6 +116,7 @@ function useHoverToOpenDropdowns(headerRef: React.RefObject<HTMLElement | null>)
         trigger.addEventListener("pointerenter", openOnHover);
         trigger.addEventListener("pointerleave", closeWhenInactive);
         panel.addEventListener("pointerleave", closeWhenInactive);
+
         cleanups.push(() => {
           trigger.removeEventListener("pointerenter", openOnHover);
           trigger.removeEventListener("pointerleave", closeWhenInactive);
@@ -104,8 +129,12 @@ function useHoverToOpenDropdowns(headerRef: React.RefObject<HTMLElement | null>)
   }, [headerRef]);
 }
 
-// Menu ships collapsed in the markup to avoid a flash on load; the no-JS
-// fallback lives in the CSS (`@media (scripting: none)`), not here.
+/**
+ * Pre-collapses the mobile nav menu to avoid flash on load/hydration.
+ * 
+ * @see Header.css "No-JS Fallback for useMobileNavToggle()"
+ * @param headerRef 
+ */
 function useMobileNavToggle(headerRef: React.RefObject<HTMLElement | null>) {
   useEffect(() => {
     const toggle = headerRef.current?.querySelector<HTMLButtonElement>(".mobile-nav-toggle");
@@ -128,12 +157,12 @@ function useMobileNavToggle(headerRef: React.RefObject<HTMLElement | null>) {
       }
     };
 
-    // Client-side navigation leaves the menu expanded otherwise.
+    // Client-side navigation leaves the menu expanded otherwise
     const handleMenuClick = (event: MouseEvent) => {
       if (event.target instanceof Element && event.target.closest("a")) setOpen(false);
     };
 
-    // Focus is deliberately left where the pointer put it, unlike Escape.
+    // Focus is left where the pointer put it (unlike esc key)
     const handleOutsidePointerDown = (event: PointerEvent) => {
       if (toggle.getAttribute("aria-expanded") !== "true") return;
       const target = event.target;
@@ -158,7 +187,7 @@ function useMobileNavToggle(headerRef: React.RefObject<HTMLElement | null>) {
 }
 
 /**
- * TODO: TSDoc
+ * TODO: @kellyme TSDoc
  */
 export default function Header() {
   const headerRef = useRef<HTMLElement>(null);
