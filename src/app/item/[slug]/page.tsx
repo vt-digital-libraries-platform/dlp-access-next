@@ -1,4 +1,4 @@
-import ItemArchivePage from "@/app/_components/item-archive-page/itemArchivePage";
+import ItemArchivePage from "@/app/_components/items/ItemArchivePage";
 
 interface Props {
   params: Promise<{ slug: string }>
