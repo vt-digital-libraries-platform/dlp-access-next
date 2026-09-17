@@ -47,3 +47,11 @@ button:has(+ [popover]:popover-open)  {
       &:not(:first-child):not(:last-child) {  opacity: 0; }
   }
 }
+
+
+/** MaginfyingGlassIcon **/
+
+.custom-icon--magnifying-glass {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}

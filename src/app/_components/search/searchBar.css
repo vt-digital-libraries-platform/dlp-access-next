@@ -36,11 +36,6 @@
         border: none;
         background-color: transparent;
       }
-
-      .search-icon {
-        width: var(--icon-size);
-        height: var(--icon-size);
-      }
     }
   }
 }
