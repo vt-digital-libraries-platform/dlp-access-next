@@ -26,3 +26,17 @@ export function HamburgerIcon() {
     </svg>
   );
 }
+
+
+/**
+ * 
+ * @returns Magnifying glass svg icon (circle and angled path)
+ */
+export function MagnifyingGlassIcon() {
+  return (
+    <svg className="custom-icon--magnifying-glass" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <circle cx="9" cy="9" r="6" stroke="currentColor" strokeWidth="2" fill="none" />
+      <path d="M13.5 13.5L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  );
+}
