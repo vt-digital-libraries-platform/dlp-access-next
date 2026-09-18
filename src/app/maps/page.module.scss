@@ -1,0 +1,128 @@
+// Maps Page Styles
+$hokieMaroon: #630031;
+$hokieOrange: #e87722;
+$darkGray: #666;
+$lighterGray: #f8f8f8;
+$borderGray: #e0e0e0;
+
+.mapsPage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.pageHeader {
+  margin-bottom: 2rem;
+  
+  .breadcrumbs {
+    font-size: 0.9rem;
+    color: $darkGray;
+    margin-bottom: 1rem;
+    
+    a {
+      color: $hokieOrange;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+    
+    span {
+      color: $hokieMaroon;
+      font-weight: 600;
+    }
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: $hokieMaroon;
+    margin: 0;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid $hokieOrange;
+  }
+}
+
+.contentWrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  
+  @media (min-width: 992px) {
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+.mainContent {
+  min-width: 0;
+}
+
+// Sidebar Styles
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.quickLinks,
+.organizationInfo {
+  background: $lighterGray;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border-left: 4px solid $hokieOrange;
+  
+  h3 {
+    font-size: 1.25rem;
+    color: $hokieMaroon;
+    margin-bottom: 1rem;
+    font-weight: 600;
+  }
+}
+
+.quickLinks {
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    li {
+      margin-bottom: 0.75rem;
+      
+      a {
+        color: $hokieMaroon;
+        text-decoration: none;
+        transition: color 0.2s;
+        
+        &:hover {
+          color: $hokieOrange;
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.orgName {
+  font-weight: 600;
+  color: $hokieMaroon;
+  margin-bottom: 0.5rem;
+}
+
+.orgDescription {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: $darkGray;
+  margin: 0;
+}
+
+.pageContent {
+  line-height: 1.6;
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  em {
+    color: $darkGray;
+  }
+}

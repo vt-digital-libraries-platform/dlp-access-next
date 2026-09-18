@@ -1,0 +1,89 @@
+$hokieMaroon: #630031;
+$hokieOrange: #e87722;
+
+.header {
+  background: white;
+  border-bottom: 1px solid #ddd;
+}
+
+.topBar {
+  background: white;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.logoLink {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+  
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+.vtLogo {
+  height: 50px;
+  width: auto;
+  flex-shrink: 0;
+}
+
+.logoDivider {
+  width: 1px;
+  height: 40px;
+  background: #d0d0d0;
+  margin: 0 0.5rem;
+}
+
+.libraryText {
+  color: $hokieMaroon;
+  font-weight: 400;
+  font-size: 1.125rem;
+  letter-spacing: 0.02em;
+}
+
+.breadcrumb {
+  padding: 0.5rem 2rem;
+  font-size: 0.875rem;
+  background: $hokieMaroon;
+}
+
+.breadcrumbLink {
+  color: white;
+  text-decoration: none;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.separator {
+  margin: 0 0.5rem;
+  color: white;
+}
+
+.current {
+  color: white;
+}
+
+.nav {
+  display: flex;
+  gap: 2rem;
+  padding: 1rem 2rem;
+  background: white;
+}
+
+.navLink {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  
+  &:hover {
+    color: $hokieOrange;
+  }
+}

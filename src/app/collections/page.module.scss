@@ -1,0 +1,225 @@
+// Collections Browse Page Styles
+$hokieMaroon: #630031;
+$hokieOrange: #e87722;
+$hokieOrangeHover: #cc6919;
+$mediumGray: #666;
+$darkGray: #333;
+$lightGray: #f5f5f5;
+$borderGray: #ddd;
+
+// Page Layout
+.pageContainer {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loadingContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 400px;
+}
+
+.loadingText {
+  font-size: 18px;
+  color: $mediumGray;
+}
+
+// Header
+.headerSection {
+  margin-bottom: 30px;
+  border-bottom: 2px solid $hokieOrange;
+  padding-bottom: 15px;
+}
+
+.pageTitle {
+  font-size: 32px;
+  font-weight: bold;
+  color: $hokieOrange;
+  margin-bottom: 10px;
+}
+
+.totalText {
+  font-size: 16px;
+  color: $mediumGray;
+}
+
+// Controls
+.controlsContainer {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.controlGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.controlLabel {
+  font-size: 14px;
+  font-weight: 600;
+  color: $darkGray;
+}
+
+.dropdown {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid $borderGray;
+  border-radius: 4px;
+  background-color: white;
+  cursor: pointer;
+  
+  &:hover {
+    border-color: $hokieOrange;
+  }
+  
+  &:focus {
+    outline: 2px solid $hokieOrange;
+    outline-offset: 2px;
+  }
+}
+
+// Pagination
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.pageButton {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+  background-color: $hokieOrange;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  
+  &:hover:not(:disabled) {
+    background-color: $hokieOrangeHover;
+  }
+  
+  &:disabled {
+    background-color: $borderGray;
+    cursor: not-allowed;
+  }
+}
+
+.pageInfo {
+  font-size: 14px;
+  font-weight: 600;
+  color: $darkGray;
+}
+
+// Collections Grid
+.collectionsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 20px;
+}
+
+.noResults {
+  text-align: center;
+  padding: 60px 20px;
+  font-size: 18px;
+  color: $mediumGray;
+}
+
+// Collection Card
+.cardLink {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.card {
+  background-color: white;
+  border: 1px solid $borderGray;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(99, 0, 49, 0.15);
+  }
+}
+
+.thumbnailContainer {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  background-color: $lightGray;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.cardContent {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cardTitle {
+  font-size: 18px;
+  font-weight: bold;
+  color: $hokieOrange;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.cardDescription {
+  font-size: 14px;
+  color: $mediumGray;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// Footer
+.footerNote {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid $borderGray;
+  text-align: center;
+}
+
+.footerText {
+  font-size: 14px;
+  color: $mediumGray;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .pageTitle {
+    font-size: 24px;
+  }
+
+  .collectionsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .controlsContainer {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
