@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Header from "@/app/_components/header/Header";
 import Footer from "@/app/_components/footer/Footer";
 import "@/app/_styles/vars.css";
-import "@/app/_styles/global.css";
+import "@/app/_styles/globals.css";
 
 export const metadata: Metadata = {
   title: "VT Digital Library Platform",
