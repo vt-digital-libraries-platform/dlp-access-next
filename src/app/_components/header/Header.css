@@ -1,0 +1,280 @@
+/* Layered so global a11y rules always win over anything here. */
+@layer components {
+  @scope (.header) {
+    :scope {
+      --header-gutter: 24px;
+      --toggle-padding: 15px;
+
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: 24px;
+      padding: 0.75rem var(--header-gutter);
+      font-size: 1.125rem;
+      background: var(--vt-white);
+      border-block-end: var(--default-border);
+    }
+
+    button {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: var(--button-padding);
+      border-radius: var(--button-border-radius);
+      font: inherit;
+      color: var(--vt-hokieStone-8s);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--primaryColor);
+      }
+    }
+
+    /* Logo */
+    .site-logo {
+      justify-self: start;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+      color: var(--primaryColor);
+      text-decoration: none;
+
+      > span:first-child {
+        font-family: var(--heading_font-family);
+        font-weight: var(--heading_font-weight);
+        font-size: 1.125rem;
+      }
+
+      > span:last-child {
+        font-size: 0.8125rem;
+        color: var(--vt-smoke-5s);
+      }
+    }
+
+    .site-search {
+      /* Extra overflow above breakpoint */
+      width: min(var(--search-max-width), 45vw);
+    }
+
+    /* Nav */
+    .site-nav {
+      justify-self: end;
+
+      > ul {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      button {
+        min-block-size: var(--min-touch-target);
+        border: 0;
+        background: none;
+      }
+
+      /* Both right-align so the flip fallback can't fire on one and not the other. */
+      [popover] {
+        position: fixed;
+        inset: auto;
+        position-area: block-end span-inline-start;
+        position-try-fallbacks: flip-inline;
+        margin: 0;
+        width: fit-content;
+        max-width: var(--dropdown-max-width);
+        padding: 0.5rem 8px;
+        border: var(--default-border);
+        border-radius: var(--input-border-radius);
+        background: var(--vt-white);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12);
+        list-style: none;
+
+        /* Delete once position-area/position-try-fallbacks support is universal. */
+        @supports not ((position-area: block-end span-inline-start) and (position-try-fallbacks: flip-inline)) {
+          top: calc(anchor(bottom) + 0.5rem);
+          right: clamp(0.5rem, anchor(right), calc(100vw - var(--dropdown-max-width) - 0.5rem));
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+          transition:
+            opacity var(--transition-time--short) var(--transition-time-function),
+            transform var(--transition-time--short) var(--transition-time-function),
+            display var(--transition-time--short) allow-discrete,
+            overlay var(--transition-time--short) allow-discrete;
+          opacity: 0;
+          transform: translateY(-0.25rem);
+
+          &:popover-open {
+            transition:
+              opacity var(--transition-time--long) var(--transition-time-function),
+              transform var(--transition-time--long) var(--transition-time-function),
+              display var(--transition-time--long) allow-discrete,
+              overlay var(--transition-time--long) allow-discrete;
+            opacity: 1;
+            transform: translateY(0);
+          }
+
+          @starting-style {
+            &:popover-open {
+              opacity: 0;
+              transform: translateY(-0.25rem);
+            }
+          }
+        }
+
+        a {
+          display: block;
+          padding: 0.5rem 10px;
+          border-radius: calc(var(--input-border-radius) / 2);
+          color: var(--vt-hokieStone-8s);
+          text-decoration: none;
+
+          &:hover,
+          &:focus-visible {
+            color: var(--primaryColor);
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+
+    /* Mobile nav — in-flow rather than a popover, so it pushes the search row down. */
+    .mobile-nav-toggle {
+      display: none;
+      padding: var(--toggle-padding);
+      border: none;
+      background: transparent;
+    }
+
+    .mobile-nav-menu {
+      display: none;
+      overflow: hidden;
+
+      .mobile-nav-menu-inner {
+        min-height: 0;
+      }
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0 0 12px;
+      }
+
+      a {
+        display: block;
+        min-block-size: var(--min-touch-target);
+        align-content: center;
+        padding-block: 0.5rem;
+        color: var(--vt-hokieStone-8s);
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+          color: var(--primaryColor);
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .mobile-nav-heading {
+      margin: 0;
+      padding-block: 8px 4px;
+      font-family: var(--heading_font-family);
+      font-weight: var(--heading_font-weight);
+      font-size: 0.8125rem;
+      color: var(--vt-smoke-5s);
+      text-transform: uppercase;
+      letter-spacing: 0.03rem;
+    }
+
+    /* One shared breakpoint — these are a single codependent layout change. */
+    @media screen and (max-width: max(48rem, 768px)) {
+      /* column-gap must stay 0 or it stacks on top of the gutter tracks. */
+      :scope {
+        --header-gutter: max(var(--toggle-padding), 3%);
+        --icon-size: 1rem;
+
+        grid-template-columns: var(--header-gutter) 1fr auto var(--header-gutter);
+        grid-template-areas:
+          ". branding toggle ."
+          "menu menu menu menu"
+          "search search search search";
+        align-items: start;
+        padding-inline: 0;
+        column-gap: 0;
+        row-gap: 12px;
+        font-size: 1rem;
+      }
+
+      .site-logo {
+        grid-area: branding;
+        align-self: center;
+      }
+
+      .site-nav {
+        display: none;
+      }
+
+      /* Pulled out by its own padding so the icon lands on the gutter line. */
+      .mobile-nav-toggle {
+        display: inline-flex;
+        grid-area: toggle;
+        justify-self: end;
+        margin-inline-end: calc(-1 * var(--toggle-padding));
+      }
+
+      /* Spans the gutters and re-indents, so overflow clips at the padding box
+         and the links' focus rings have room to paint. */
+      .mobile-nav-menu {
+        grid-area: menu;
+        padding-inline: var(--header-gutter);
+
+        &:not([hidden]) {
+          display: grid;
+          grid-template-rows: 1fr;
+        }
+
+        @media (prefers-reduced-motion: no-preference) {
+          grid-template-rows: 0fr;
+          transition:
+            grid-template-rows var(--transition-time--x-long) var(--transition-time-function),
+            display var(--transition-time--x-long) allow-discrete;
+
+          &:not([hidden]) {
+            grid-template-rows: 1fr;
+          }
+
+          @starting-style {
+            &:not([hidden]) {
+              grid-template-rows: 0fr;
+            }
+          }
+        }
+      }
+
+      /* Menu ships collapsed to avoid a hydration flash, so no-JS reveals it here. */
+      @media (scripting: none) {
+        .mobile-nav-toggle {
+          display: none;
+        }
+
+        .mobile-nav-menu[hidden] {
+          display: grid;
+          grid-template-rows: 1fr;
+        }
+      }
+
+      .site-search {
+        /* Without dropping the bar's own floor it can't shrink to the row. */
+        --search-min-width: 0;
+
+        grid-area: search;
+        width: auto;
+        padding: 12px var(--header-gutter);
+        background: var(--vt-smoke-7t);
+      }
+    }
+  }
+}
