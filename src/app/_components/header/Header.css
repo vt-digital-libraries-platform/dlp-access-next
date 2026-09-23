@@ -189,22 +189,21 @@
 
     /* Shared breakpoint for codependent layout changes. */
     @media screen and (max-width: max(48rem, 768px)) {
-      :scope {
-        --header-gutter: max(var(--toggle-padding), 3%);
-        --icon-size: 1rem;
+      
+      --header-gutter: max(var(--toggle-padding), 3%);
+      --icon-size: 1rem;
 
-        grid-template-columns: var(--header-gutter) 1fr auto var(--header-gutter);
-        grid-template-areas:
-          ". branding toggle ."
-          "menu menu menu menu"
-          "search search search search";
-        align-items: start;
-        padding-inline: 0;
-        /* column-gap must stay 0 or it stacks on top of the gutter tracks */
-        column-gap: 0;
-        row-gap: 12px;
-        font-size: 1rem;
-      }
+      grid-template-columns: var(--header-gutter) 1fr auto var(--header-gutter);
+      grid-template-areas:
+        ". branding toggle ."
+        "menu menu menu menu"
+        "search search search search";
+      align-items: start;
+      padding-inline: 0;
+      /* column-gap must stay 0 or it stacks on top of the gutter tracks */
+      column-gap: 0;
+      row-gap: 12px;
+      font-size: 1rem;
 
       .site-logo {
         grid-area: branding;
