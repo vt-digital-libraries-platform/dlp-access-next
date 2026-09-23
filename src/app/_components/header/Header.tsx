@@ -195,7 +195,7 @@ export default function Header() {
   useMobileNavToggle(headerRef);
 
   return (
-    <header className="header" ref={headerRef}>
+    <header ref={headerRef}>
       <Link href="/" className="site-logo">
         <span>Virginia Tech</span>
         <span>Digital Library</span>
