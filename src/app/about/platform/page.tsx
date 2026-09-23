@@ -1,4 +1,4 @@
-export default function AboutPage() {
+export default function PlatformPage() {
   return (
     <>
       <h1>About the Platform</h1>
