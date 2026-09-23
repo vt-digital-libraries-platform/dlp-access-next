@@ -1,19 +1,19 @@
-/* Layered so global a11y rules always win over anything here. */
 @layer components {
-  @scope (.header) {
-    :scope {
-      --header-gutter: 24px;
-      --toggle-padding: 15px;
 
-      display: grid;
-      grid-template-columns: 1fr auto 1fr;
-      align-items: center;
-      gap: 24px;
-      padding: 0.75rem var(--header-gutter);
-      font-size: 1.125rem;
-      background: var(--vt-white);
-      border-block-end: var(--default-border);
-    }
+  header {
+
+    /* TODO @kellyme standardize & globalize additional props in here */
+    --header-gutter: 24px;
+    --toggle-padding: 15px;
+
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 24px;
+    padding: 0.75rem var(--header-gutter);
+    font-size: 1.125rem;
+    background: var(--vt-white);
+    border-block-end: var(--default-border);
 
     button {
       display: inline-flex;
@@ -30,7 +30,6 @@
       }
     }
 
-    /* Logo */
     .site-logo {
       justify-self: start;
       display: flex;
@@ -56,7 +55,6 @@
       width: min(var(--search-max-width), 45vw);
     }
 
-    /* Nav */
     .site-nav {
       justify-self: end;
 
@@ -189,9 +187,8 @@
       letter-spacing: 0.03rem;
     }
 
-    /* One shared breakpoint — these are a single codependent layout change. */
+    /* Shared breakpoint for codependent layout changes. */
     @media screen and (max-width: max(48rem, 768px)) {
-      /* column-gap must stay 0 or it stacks on top of the gutter tracks. */
       :scope {
         --header-gutter: max(var(--toggle-padding), 3%);
         --icon-size: 1rem;
@@ -203,6 +200,7 @@
           "search search search search";
         align-items: start;
         padding-inline: 0;
+        /* column-gap must stay 0 or it stacks on top of the gutter tracks */
         column-gap: 0;
         row-gap: 12px;
         font-size: 1rem;
@@ -217,11 +215,11 @@
         display: none;
       }
 
-      /* Pulled out by its own padding so the icon lands on the gutter line. */
       .mobile-nav-toggle {
         display: inline-flex;
         grid-area: toggle;
         justify-self: end;
+        /* Adjust for padding so visible icon edge lines up with the page gutter */
         margin-inline-end: calc(-1 * var(--toggle-padding));
       }
 
@@ -254,7 +252,7 @@
         }
       }
 
-      /* Menu ships collapsed to avoid a hydration flash, so no-JS reveals it here. */
+      /* No-JS Fallback for useMobileNavToggle() in Header.tsx to avoid hydration flash */
       @media (scripting: none) {
         .mobile-nav-toggle {
           display: none;
@@ -267,7 +265,7 @@
       }
 
       .site-search {
-        /* Without dropping the bar's own floor it can't shrink to the row. */
+        /* Handling for search bar not being able to shrink to the row gracefully. */
         --search-min-width: 0;
 
         grid-area: search;

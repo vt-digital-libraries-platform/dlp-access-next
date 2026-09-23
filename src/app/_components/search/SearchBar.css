@@ -1,41 +1,41 @@
 @layer components {
-  @scope (.site-search) {
-    :scope {
-      form {
-        display: flex;
-        align-items: center;
-        width: 100%;
-      }
+  
+  .site-search {
 
-      .input-group {
-        display: flex;
-        align-items: stretch;
-        flex: 1;
-        min-width: var(--search-min-width, var(--component-max-width));
-        box-sizing: border-box;
-        border: var(--default-border);
-        border-radius: var(--input-border-radius);
-      }
+    form {
+      display: flex;
+      align-items: center;
+      width: 100%;
+    }
 
-      input {
-        flex: 1;
-        min-width: 0;
-        box-sizing: border-box;
-        padding-inline: 12px;
-        border: 0;
-        font: inherit;
-        color: var(--vt-hokieStone-8s);
-      }
+    .input-group {
+      display: flex;
+      align-items: stretch;
+      flex: 1;
+      min-width: var(--search-min-width, var(--component-max-width));
+      box-sizing: border-box;
+      border: var(--default-border);
+      border-radius: var(--input-border-radius);
+    }
 
-      button {
-        justify-content: center;
-        box-sizing: border-box;
-        min-inline-size: var(--min-touch-target);
-        min-block-size: var(--min-touch-target);
-        padding: 8px;
-        border: none;
-        background-color: transparent;
-      }
+    input {
+      flex: 1;
+      min-width: 0;
+      box-sizing: border-box;
+      padding-inline: 12px;
+      border: 0;
+      font: inherit;
+      color: var(--vt-hokieStone-8s);
+    }
+
+    button {
+      justify-content: center;
+      box-sizing: border-box;
+      min-inline-size: var(--min-touch-target);
+      min-block-size: var(--min-touch-target);
+      padding: 8px;
+      border: none;
+      background-color: transparent;
     }
   }
 }
