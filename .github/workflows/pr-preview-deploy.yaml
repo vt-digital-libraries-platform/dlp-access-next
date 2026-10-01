@@ -55,6 +55,13 @@ jobs:
             exit 1
           fi
 
+      - name: Load app settings from Secrets Manager
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
+        with:
+          secret-ids: |
+            APP,ci/dlp-access-next/deploy-app-secrets
+          parse-json-secrets: true
+
       - name: Check EB environment status
         id: check-eb-env-status
         run: |
@@ -88,13 +95,13 @@ jobs:
           IMAGE_TAG: ${{ env.COMMIT_HASH }}
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_AWS_PROJECT_REGION="${{secrets.NEXT_PUBLIC_AWS_PROJECT_REGION}}" \
-            --build-arg NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT}}" \
-            --build-arg NEXT_PUBLIC_AWS_APPSYNC_REGION="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_REGION}}" \
-            --build-arg NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE}}" \
-            --build-arg NEXT_PUBLIC_AWS_APPSYNC_API_KEY="${{secrets.NEXT_PUBLIC_AWS_APPSYNC_API_KEY}}" \
-            --build-arg NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID="${{secrets.NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID}}" \
-            --build-arg NEXT_PUBLIC_AWS_COGNITO_REGION="${{secrets.NEXT_PUBLIC_AWS_COGNITO_REGION}}" \
+            --build-arg NEXT_PUBLIC_AWS_PROJECT_REGION="${{env.APP_NEXT_PUBLIC_AWS_PROJECT_REGION}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT="${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_REGION="${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_REGION}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE="${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE}}" \
+            --build-arg NEXT_PUBLIC_AWS_APPSYNC_API_KEY="${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_API_KEY}}" \
+            --build-arg NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID="${{env.APP_NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID}}" \
+            --build-arg NEXT_PUBLIC_AWS_COGNITO_REGION="${{env.APP_NEXT_PUBLIC_AWS_COGNITO_REGION}}" \
             -t $REGISTRY/$REPOSITORY:$IMAGE_TAG .
           docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
 
@@ -111,13 +118,13 @@ jobs:
             "Environment": [
               { "Name": "HOSTNAME", "Value": "0.0.0.0" },
               { "Name": "PORT", "Value": "3000" },
-              { "Name": "NEXT_PUBLIC_AWS_PROJECT_REGION", "Value": "${{secrets.NEXT_PUBLIC_AWS_PROJECT_REGION}}" },
-              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT}}" },
-              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_REGION", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_REGION}}" },
-              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE}}" },
-              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_API_KEY", "Value": "${{secrets.NEXT_PUBLIC_AWS_APPSYNC_API_KEY}}" },
-              { "Name": "NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID", "Value": "${{secrets.NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID}}" },
-              { "Name": "NEXT_PUBLIC_AWS_COGNITO_REGION", "Value": "${{secrets.NEXT_PUBLIC_AWS_COGNITO_REGION}}" }
+              { "Name": "NEXT_PUBLIC_AWS_PROJECT_REGION", "Value": "${{env.APP_NEXT_PUBLIC_AWS_PROJECT_REGION}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT", "Value": "${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_GRAPHQL_ENDPOINT}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_REGION", "Value": "${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_REGION}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE", "Value": "${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_AUTHENTICATION_TYPE}}" },
+              { "Name": "NEXT_PUBLIC_AWS_APPSYNC_API_KEY", "Value": "${{env.APP_NEXT_PUBLIC_AWS_APPSYNC_API_KEY}}" },
+              { "Name": "NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID", "Value": "${{env.APP_NEXT_PUBLIC_AWS_COGNITO_IDENTITY_POOL_ID}}" },
+              { "Name": "NEXT_PUBLIC_AWS_COGNITO_REGION", "Value": "${{env.APP_NEXT_PUBLIC_AWS_COGNITO_REGION}}" }
             ]
           }
           JSON
