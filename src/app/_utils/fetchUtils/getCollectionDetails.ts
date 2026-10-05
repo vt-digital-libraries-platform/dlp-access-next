@@ -72,9 +72,29 @@ const ARK_PREFIX = "ark:/53696/";
  * Accepts a URL slug or a full ARK and returns the full custom_key, e.g.
  * "6997b595", "ark%3A%2F53696%2F6997b595" and "ark:/53696/6997b595" all give "ark:/53696/6997b595".
  */
-function toCustomKey(key: string): string {
+export function toCustomKey(key: string): string {
   const decoded = decodeURIComponent(key).trim();
   return decoded.startsWith("ark:/") ? decoded : `${ARK_PREFIX}${decoded}`;
+}
+
+/**
+ * Fetches one collection by its database ID.
+ *
+ * @returns The collection, or null if it doesn't exist
+ */
+export async function getCollectionById(id: string): Promise<CollectionDetails | null> {
+  const data = await graphqlRequest<{ getCollection: CollectionDetails | null }>(GET_COLLECTION, { id });
+  return data.getCollection;
+}
+
+/**
+ * Returns a collection's top-level ancestor (heirarchy_path[0]), or the collection itself if
+ * it's already top-level, like dlp-access's getTopLevelParentForCollection.
+ */
+export async function getTopLevelParent(collection: CollectionDetails): Promise<CollectionDetails> {
+  const topLevelId = collection.heirarchy_path?.[0];
+  if (!topLevelId || topLevelId === collection.id) return collection;
+  return (await getCollectionById(topLevelId)) ?? collection;
 }
 
 /**
@@ -102,15 +122,7 @@ export async function getCollectionDetails(customKey: string): Promise<Collectio
     const collection = data.searchCollections.items[0];
     if (!collection) return null;
 
-    const topLevelId = collection.heirarchy_path?.[0];
-    if (!topLevelId || topLevelId === collection.id) {
-      return { collection, topLevel: collection };
-    }
-
-    const parent = await graphqlRequest<{ getCollection: CollectionDetails | null }>(GET_COLLECTION, {
-      id: topLevelId,
-    });
-    return { collection, topLevel: parent.getCollection ?? collection };
+    return { collection, topLevel: await getTopLevelParent(collection) };
   } catch (error) {
     console.error(`Error fetching collection: ${customKey}`, error);
     return null;
