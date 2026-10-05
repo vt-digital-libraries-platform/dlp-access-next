@@ -1,4 +1,5 @@
 import { graphqlRequest } from "./graphqlRequest";
+import { getRepType } from "./repType";
 
 const SITE_BY_SITE_ID = /* GraphQL */ `
   query SiteBySiteId($siteId: String!, $limit: Int) {
@@ -41,9 +42,7 @@ export type Site = {
  * @param siteId The site's siteId (case-insensitive)
  * @returns The site configuration, or null if it can't be loaded or doesn't exist
  */
-export async function getSite(
-  siteId = process.env.NEXT_PUBLIC_REP_TYPE ?? "federated"
-): Promise<Site | null> {
+export async function getSite(siteId = getRepType()): Promise<Site | null> {
   try {
     const data = await graphqlRequest<{ siteBySiteId: { items: Site[] } }>(SITE_BY_SITE_ID, {
       siteId: siteId.toLowerCase(),
