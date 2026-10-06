@@ -78,6 +78,14 @@ export function toCustomKey(key: string): string {
 }
 
 /**
+ * The reverse of toCustomKey: returns the short URL slug for a custom key, e.g.
+ * "ark:/53696/6997b595" gives "6997b595".
+ */
+export function toSlug(customKey: string | null): string {
+  return (customKey ?? "").replace(ARK_PREFIX, "");
+}
+
+/**
  * Fetches one collection by its database ID.
  *
  * @returns The collection, or null if it doesn't exist
