@@ -21,6 +21,7 @@ const COLLECTION_FIELDS = /* GraphQL */ `
   bibliographic_citation
   heirarchy_path
   parent_collection
+  collectionmap_id
   updatedAt
 `;
 
@@ -58,6 +59,7 @@ export type CollectionDetails = {
   bibliographic_citation: string[] | null;
   heirarchy_path: string[] | null;
   parent_collection: string[] | null;
+  collectionmap_id: string | null;
   updatedAt: string;
 };
 
