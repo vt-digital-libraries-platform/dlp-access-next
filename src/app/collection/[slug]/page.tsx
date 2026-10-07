@@ -27,6 +27,10 @@ export default async function CollectionPage({ params }: Props) {
 
   return (
     <>
+      { topLevel.thumbnail_path && (
+        // eslint-disable-next-line @next/next/no-img-element -- plain img like dlp-access; images come from several hosts
+        <img src={ topLevel.thumbnail_path } alt="" />
+      ) }
       <h1>{ collection.title }</h1>
       { collection.description?.map((text, i) => <p key={ i }>{ text }</p>) }
       { map && <CollectionOrganization map={ map } currentId={ collection.id } /> }
@@ -34,6 +38,10 @@ export default async function CollectionPage({ params }: Props) {
       <ul>
         { items.map((item) => (
           <li key={ item.id }>
+            { item.thumbnail_path && (
+              // eslint-disable-next-line @next/next/no-img-element -- plain img like dlp-access
+              <img src={ item.thumbnail_path } alt="" />
+            ) }
             <Link href={ `/item/${ toSlug(item.custom_key) }` }>{ item.title }</Link>
           </li>
         )) }
