@@ -2,6 +2,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCollectionDetails, toSlug } from "@/app/_utils/fetchUtils/getCollectionDetails";
 import { getCollectionItems } from "@/app/_utils/fetchUtils/getCollectionItems";
+import { getCollectionMap } from "@/app/_utils/fetchUtils/getCollectionMap";
+import CollectionOrganization from "@/app/_components/collection/CollectionOrganization";
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -21,14 +23,13 @@ export default async function CollectionPage({ params }: Props) {
 
   const { collection, topLevel } = details;
   const { items, total } = await getCollectionItems(collection.id);
+  const map = await getCollectionMap(collection, topLevel);
 
   return (
     <>
       <h1>{ collection.title }</h1>
-      { topLevel.id !== collection.id && (
-        <p>Part of <Link href={ `/collection/${ toSlug(topLevel.custom_key) }` }>{ topLevel.title }</Link></p>
-      ) }
       { collection.description?.map((text, i) => <p key={ i }>{ text }</p>) }
+      { map && <CollectionOrganization map={ map } currentId={ collection.id } /> }
       <h2>Items ({ total })</h2>
       <ul>
         { items.map((item) => (
