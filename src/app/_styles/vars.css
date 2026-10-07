@@ -1,0 +1,119 @@
+:root {
+
+  /** COLOR DEFINITIONS **/
+
+  /* Virginia Tech Brand Colors */
+
+  /* vt-maroon */
+  --vt-maroon: #861f41;
+  --vt-maroon-2s: #6b1934;
+
+  /* vt-burntOrange */
+  --vt-burntOrange: #e5751f;
+
+  /* vt-hokieStone */
+  --vt-hokieStone: #75787b;
+  --vt-hokieStone-1s: #696c6f;
+  --vt-hokieStone-8s: #171819;
+
+  /* vt-white */
+  --vt-white: #ffffff;
+
+  /* vt-grey */
+  --vt-grey-2t: #dfdbd5;
+  --vt-grey-3s: #97938e; /* Contrast on white: 3.05:1
+                              Contrast on vt-maroon: 3:1
+                              => WCAG AA for large text, graphical objects, and UI components */
+
+  /* vt-smoke */
+  --vt-smoke: #e5e1e6;
+  --vt-smoke-7t: #f2f0f2;
+  --vt-smoke-9t: #faf9fa;
+  --vt-smoke-5s: #737173; /* Contrast on white: 4.84:1 */
+  --vt-smoke-9s: #171617;
+
+  /* vt-impactOrange */
+  --vt-impactOrange: #ca4f00;
+  --vt-impactOrange-1s: #b64700;
+  --vt-impactOrange-4s: #792f00;
+  --vt-impactOrange-7hs: #4f1f00;  /* Unofficial 7 1/2th shade
+                                        Contrast on impactOrange: 3.02:1 */
+
+
+  /* Project Colors */
+
+  --hokieMaroon: var(--vt-maroon);
+  --hokieMaroonHover: #4c0000;
+  --hokieOrange: var(--vt-impactOrange);
+  --hokieOrangeHover: var(--vt-impactOrange-7hs);
+  --light-gray: var(--vt-smoke-9t);
+  --dark-gray: var(--vt-hokieStone);
+  --darker-gray: #555;
+  --link-blue: #007bff;
+
+
+  /* Color Roles */
+
+  /* primary */
+  --primaryColor: var(--vt-maroon);
+
+  /* secondary */
+  --secondaryColor: var(--vt-impactOrange);
+
+  /* tertiary */
+  --tertiaryColor: var(--vt-hokieStone);
+
+  /* surface */
+  --backgroundColor: var(--vt-white);
+  --textColor: var(--vt-hokieStone-8s);
+
+
+  /* Grandfathered Color Roles - TODO: Remove these */
+  --themeHighlightColor: var(--vt-maroon);
+  --sponsorsColor: var(--vt-hokieStone);
+
+
+  /** FONTS **/
+
+  /* Headings */
+  --heading_font-family: "gineso-condensed", sans-serif;
+  --heading_font-weight: 500;
+
+  /* Body */
+  --body_font-family: "Acherus", sans-serif;
+  
+  --titleFontSize: 40px;
+
+  --focus-color: var(--vt-maroon);
+  --focus-color--dark: var(--vt-white);
+  --focus-color--input: var(--hokieOrange);
+
+  --focus_outline: 2px dashed var(--focus-color);
+  --focus_outline--dark: 2px dashed var(--focus-color--dark);
+  --focus-outline--input: 2px solid var(--focus-color--input);
+
+  --focus-outline__offset: 3px;
+
+  --input-border-radius: 8px;
+  --button-border-radius: 12px;
+  --input-padding: 0.5rem 12px;
+  --button-padding: 0.5rem 12px;
+  --icon-button-padding: 12px;
+
+  --default-border: 1px solid var(--vt-grey-2t);
+
+  --component-max-width: min(300px, 95vw);
+  --search-max-width: max(384px, 24rem);
+  --dropdown-max-width: min(240px, 90vw);
+
+  /* Redeclare on the component, not on the icons. */
+  --icon-size: 1.125rem;
+
+  --min-touch-target: 44px;
+
+  --transition-time-function: cubic-bezier(0.23, 1, 0.32, 1 ); /* fast in, ease middle, fast out (like a reverse ease-in-out) good for a a jump-up transform transition */
+  --transition-time--short: 0.15s;
+  --transition-time--long: 0.3s;
+  --transition-time--x-long: 0.5s;
+  --transition-duration: var(--transition-time--long); /* legacy alias — migrate call sites to --transition-time--long */
+}

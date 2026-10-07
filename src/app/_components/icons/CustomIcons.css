@@ -1,0 +1,57 @@
+/** ChevronIcon **/
+
+.custom-icon--chevron {
+  --chevron-scale: 0.85;
+  width: calc(var(--icon-size) * var(--chevron-scale));
+  height: calc(var(--icon-size) * var(--chevron-scale));
+
+  line {
+    @media (prefers-reduced-motion: no-preference) {
+      transition: transform var(--transition-time--long) var(--transition-time-function);
+    }
+  }
+}
+
+/* Selectors for ChevronIcon parent element states prompting transformation */
+button:has(+ [popover]:popover-open)  {
+  & > .custom-icon--chevron > line {
+    &:first-child { transform: translateX(4.5px); }
+    &:last-child { transform: translateX(-4.5px); }
+  }
+}
+
+
+/** HamburgerIcon **/
+
+.custom-icon--hamburger {
+  width: calc(var(--icon-size) * 1.125);
+  height: calc(var(--icon-size) * 0.9);
+
+  line {
+    transform-box: fill-box;
+    transform-origin: center;
+
+    @media (prefers-reduced-motion: no-preference) {
+      transition:
+        transform var(--transition-time--x-long) var(--transition-time-function),
+        opacity var(--transition-time--x-long) var(--transition-time-function);
+    }
+  }
+}
+
+/* Selectors for HamburgerIcon parent element states prompting transformation */
+[aria-expanded="true"]:has(>.custom-icon--hamburger) {
+    & > .custom-icon--hamburger > line {
+      &:first-child { transform: translateY(6px) rotate(45deg);  }
+      &:last-child { transform: translateY(-6px) rotate(-45deg); }
+      &:not(:first-child):not(:last-child) {  opacity: 0; }
+  }
+}
+
+
+/** MaginfyingGlassIcon **/
+
+.custom-icon--magnifying-glass {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
