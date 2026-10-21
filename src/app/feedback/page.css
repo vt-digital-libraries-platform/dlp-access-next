@@ -1,0 +1,247 @@
+/*
+ * Feedback page styles, copied from dlp-access production:
+ *   1. src/css/Typography.scss: the .typography-wrapper rules this page uses
+ *      (base text, headings, paragraphs, links, form inputs and radio buttons)
+ *   2. src/css/FeedbackPage.scss: unchanged
+ */
+
+/* 1. From Typography.scss */
+
+.typography-wrapper {
+  /* DEFAULTS */
+
+  font-family: "Acherus", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  text-align: left;
+  color: rgba(
+    0,
+    0,
+    0,
+    1
+  ); /* Prevent semantic.min.css from adding 87% opacity to button text */
+
+  /* CUSTOMIZATIONS */
+
+  /** Semantic Elements */
+
+  & h1,
+  & .h1,
+  & h2,
+  & .h2,
+  & h3,
+  & .h3,
+  & h4,
+  & .h4,
+  & h5,
+  & .h5,
+  & h6,
+  & .h6 {
+    font-family: "gineso-condensed", sans-serif;
+    font-weight: 600;
+    font-size: 1.125rem;
+    text-align: left;
+  }
+
+  & h1,
+  & .h1 {
+    font-size: 2.5rem;
+    padding: 1rem 0 0.25rem 0;
+
+    @media (min-width: 1200px) {
+      font-size: 2.75rem;
+      padding: 1.5rem 0 0.25rem 0;
+    }
+  }
+
+  & h2,
+  & .h2 {
+    font-size: 2rem;
+    padding: 0.5rem 0 0.125rem 0;
+
+    @media (min-width: 1200px) {
+      font-size: 2.25rem;
+      padding: 0.75rem 0 0.125rem 0;
+    }
+  }
+
+  & p {
+    line-height: 1.6;
+  }
+
+  & a {
+    color: var(--hokieOrange);
+    text-decoration: underline;
+
+    &:visited {
+      color: var(--hokieOrange);
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      color: var(---hokieOrangeHover);
+    }
+  }
+
+  .focusable,
+  button,
+  a {
+    &:focus-visible {
+      outline: var(--focus_outline);
+      outline-offset: var(--focus-outline__offset);
+    }
+  }
+
+  /* Forms & Inputs */
+
+  input:not([type="radio"], [type="checkbox"]),
+  textarea {
+    width: 100%;
+    padding: 12px;
+    margin: calc(var(--focus-outline__offset) + 2px) 0;
+    border-radius: var(--input-border-radius);
+    outline: none;
+    border: 1px solid var(--vt-grey-3s);
+
+    transition: outline-color 0.3s var(--transition-time-function);
+
+    &:focus-visible {
+      border-color: var(--focus-color--input);
+      outline: var(--focus-outline--input);
+      outline-offset: var(--focus-outline__offset);
+    }
+  }
+
+  textarea {
+    resize: vertical;
+  }
+
+  input[type="radio"] {
+    width: 1.125rem;
+    height: 1.125rem;
+    border-radius: 100%;
+    overflow: hidden;
+  }
+
+  .radio-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 2px 4px;
+    width: fit-content;
+    gap: 8px;
+
+    & label {
+      margin-bottom: 0;
+    }
+  }
+
+  .radio-option:has(input[type="radio"]:focus-visible),
+  .radio-option:has(input[type="radio"]:hover) {
+    border-radius: var(--input-border-radius);
+    outline: var(--focus-outline--input);
+    outline-offset: var(--focus-outline__offset);
+
+    & input[type="radio"] {
+      outline: none;
+    }
+  }
+
+  .radio-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+/* 2. FeedbackPage.scss */
+
+.feedback-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: max(32px, 2rem);
+
+  .feedback-instructions {
+    padding: 12px;
+    background-color: var(--vt-smoke-7t);
+    border-left: 4px solid var(--hokieOrange);
+  }
+
+  fieldset,
+  .form-control {
+    border: 1px solid var(--vt-grey-3s);
+    padding: 16px;
+    border-radius: var(--input-border-radius);
+
+    @media screen and (min-width: max(48rem, 768px)) {
+      padding: 24px;
+    }
+  }
+
+  fieldset > legend,
+  .form-control > label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: max(16px, 1rem);
+  }
+
+  .alert {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .alert-success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    border-left: 4px solid #28a745;
+  }
+
+  .alert-danger {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+    border-left: 4px solid #dc3545;
+  }
+
+  .alert strong {
+    font-weight: 600;
+  }
+
+  .submit-button {
+    width: fit-content;
+    background-color: var(--hokieOrange);
+    color: white;
+    font-size: 1.15rem;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 12px 30px;
+    border: none;
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    transition: background-color 0.3s var(--transition-time-function);
+
+    &:hover,
+    &:focus {
+      background-color: var(--hokieOrangeHover);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &:disabled,
+    &:disabled:hover {
+      background-color: var(--vt-white);
+      border: 1px solid var(--vt-smoke-5s);
+      box-shadow: inset 2px 2px 4px -2px var(--vt-smoke-5s);
+      color: var(--vt-smoke-5s);
+      cursor: not-allowed;
+      transform: none;
+    }
+  }
+}
