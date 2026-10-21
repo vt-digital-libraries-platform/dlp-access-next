@@ -22,6 +22,8 @@ const COLLECTION_FIELDS = /* GraphQL */ `
   heirarchy_path
   parent_collection
   collectionmap_id
+  visibility
+  collection_category
   updatedAt
 `;
 
@@ -60,12 +62,14 @@ export type CollectionDetails = {
   heirarchy_path: string[] | null;
   parent_collection: string[] | null;
   collectionmap_id: string | null;
+  visibility: boolean | null;
+  collection_category: string | null;
   updatedAt: string;
 };
 
 export type CollectionWithParent = {
   collection: CollectionDetails;
-  topLevel: CollectionDetails;
+  topLevel: CollectionDetails | null;
 };
 
 const ARK_PREFIX = "ark:/53696/";
@@ -88,23 +92,27 @@ export function toSlug(customKey: string | null): string {
 }
 
 /**
- * Fetches one collection by its database ID.
+ * Fetches one visible collection of this site by its database ID. getCollection can't filter,
+ * so the visibility and site checks happen here.
  *
- * @returns The collection, or null if it doesn't exist
+ * @returns The collection, or null if it doesn't exist, is hidden, or belongs to another site
  */
 export async function getCollectionById(id: string): Promise<CollectionDetails | null> {
   const data = await graphqlRequest<{ getCollection: CollectionDetails | null }>(GET_COLLECTION, { id });
-  return data.getCollection;
+  const collection = data.getCollection;
+  if (!collection?.visibility || collection.collection_category?.toLowerCase() !== getRepType()) return null;
+  return collection;
 }
 
 /**
  * Returns a collection's top-level ancestor (heirarchy_path[0]), or the collection itself if
  * it's already top-level, like dlp-access's getTopLevelParentForCollection.
+ * Returns null if the top-level ancestor is hidden or belongs to another site.
  */
-export async function getTopLevelParent(collection: CollectionDetails): Promise<CollectionDetails> {
+export async function getTopLevelParent(collection: CollectionDetails): Promise<CollectionDetails | null> {
   const topLevelId = collection.heirarchy_path?.[0];
   if (!topLevelId || topLevelId === collection.id) return collection;
-  return (await getCollectionById(topLevelId)) ?? collection;
+  return getCollectionById(topLevelId);
 }
 
 /**

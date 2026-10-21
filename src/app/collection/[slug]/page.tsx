@@ -27,7 +27,7 @@ export default async function CollectionPage({ params }: Props) {
 
   return (
     <>
-      { topLevel.thumbnail_path && (
+      { topLevel?.thumbnail_path && (
         // eslint-disable-next-line @next/next/no-img-element -- plain img like dlp-access; images come from several hosts
         <img src={ topLevel.thumbnail_path } alt="" />
       ) }

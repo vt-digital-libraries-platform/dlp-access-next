@@ -79,8 +79,8 @@ export type ItemDetails = {
 
 export type ItemWithCollections = {
   item: ItemDetails;
-  collection: CollectionDetails;
-  topLevel: CollectionDetails;
+  collection: CollectionDetails | null;
+  topLevel: CollectionDetails | null;
 };
 
 /**
@@ -89,7 +89,8 @@ export type ItemWithCollections = {
  * Used by both /item/[slug] and /archive/[slug].
  *
  * @param customKey The item's custom key: a slug ("2z11cq41") or full ARK
- * @returns The item with its collection and top-level parent, or null if any is missing
+ * @returns The item with its collection and top-level parent (null if hidden or from another
+ * site), or null if the item isn't found
  */
 export async function getItemDetails(customKey: string): Promise<ItemWithCollections | null> {
   if (!customKey?.trim()) return null;
@@ -108,9 +109,8 @@ export async function getItemDetails(customKey: string): Promise<ItemWithCollect
 
     const parentId = item.parent_collection?.[0];
     const collection = parentId ? await getCollectionById(parentId) : null;
-    if (!collection) return null;
 
-    return { item, collection, topLevel: await getTopLevelParent(collection) };
+    return { item, collection, topLevel: collection ? await getTopLevelParent(collection) : null };
   } catch (error) {
     console.error(`Error fetching item: ${customKey}`, error);
     return null;
