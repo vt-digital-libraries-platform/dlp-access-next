@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CollectionMapNode } from "@/app/_utils/fetchUtils/getCollectionMap";
+import { toSlug } from "@/app/_utils/fetchUtils/getCollectionDetails";
 
 interface Props {
   map: CollectionMapNode
@@ -7,14 +8,18 @@ interface Props {
 }
 
 function TreeNode({ node, currentId }: { node: CollectionMapNode, currentId: string }) {
+  const slug = toSlug(node.custom_key);
+
   return (
     <li>
-      <Link
-        href={ `/collection/${ node.custom_key }` }
-        aria-current={ node.id === currentId ? "page" : undefined }
-      >
-        { node.name }
-      </Link>
+      { slug && slug !== "null" ? (
+        <Link
+          href={ `/collection/${ slug }` }
+          aria-current={ node.id === currentId ? "page" : undefined }
+        >
+          { node.name }
+        </Link>
+      ) : node.name }
       { node.children?.length ? (
         <ul>
           { node.children.map((child) => <TreeNode key={ child.id } node={ child } currentId={ currentId } />) }
