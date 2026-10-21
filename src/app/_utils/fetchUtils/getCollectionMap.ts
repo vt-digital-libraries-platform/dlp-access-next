@@ -42,7 +42,7 @@ export async function getCollectionMap(
   collection: CollectionDetails,
   topLevel: CollectionDetails
 ): Promise<CollectionMapNode | null> {
-  const mapId = collection.collectionmap_id ?? topLevel.collectionmap_id;
+  const mapId = collection.collectionmap_id || topLevel.collectionmap_id;
   if (!mapId) return null;
   try {
     const data = await graphqlRequest<{ getCollectionmap: { map_object: string } | null }>(

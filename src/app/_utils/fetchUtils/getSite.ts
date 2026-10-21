@@ -48,7 +48,7 @@ export async function getSite(siteId = getRepType()): Promise<Site | null> {
       siteId: siteId.toLowerCase(),
       limit: 1,
     });
-    return data.siteBySiteId.items[0] ?? null;
+    return data.siteBySiteId.items[0] || null;
   } catch (error) {
     console.error("Error fetching site configuration:", error);
     return null;
