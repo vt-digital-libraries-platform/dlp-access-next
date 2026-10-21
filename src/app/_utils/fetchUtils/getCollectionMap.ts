@@ -35,13 +35,14 @@ function sortTree(node: CollectionMapNode): CollectionMapNode {
  * using the collection's own map or its top-level parent's, like dlp-access's useLoadMap.
  *
  * @param collection The collection being shown
- * @param topLevel Its top-level parent (itself if top-level)
- * @returns The sorted tree, or null if there's no map or it can't be loaded
+ * @param topLevel Its top-level parent (itself if top-level), or null if that's hidden
+ * @returns The sorted tree, or null if there's no map, it can't be loaded, or the top-level is hidden
  */
 export async function getCollectionMap(
   collection: CollectionDetails,
-  topLevel: CollectionDetails
+  topLevel: CollectionDetails | null
 ): Promise<CollectionMapNode | null> {
+  if (!topLevel) return null;
   const mapId = collection.collectionmap_id || topLevel.collectionmap_id;
   if (!mapId) return null;
   try {
