@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // AWS Lambda code, deployed separately (see src/app/_lambda/README.md)
+    "src/app/_lambda/**",
   ]),
 ]);
 
