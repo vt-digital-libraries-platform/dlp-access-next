@@ -1,5 +1,5 @@
 import { graphqlRequest } from "./graphqlRequest";
-import type { SortOption } from "./getBrowseCollections";
+import type { SortOption } from "./getTopLevelCollections";
 
 const SEARCH_COLLECTION_ITEMS = /* GraphQL */ `
   query SearchCollectionItems(
