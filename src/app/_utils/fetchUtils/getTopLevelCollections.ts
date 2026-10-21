@@ -2,7 +2,7 @@ import { graphqlRequest } from "./graphqlRequest";
 import { getRepType } from "./repType";
 
 const FULLTEXT_COLLECTIONS = /* GraphQL */ `
-  query BrowseCollections(
+  query TopLevelCollections(
     $filter: SearchableCollectionFilterInput
     $sort: SearchableCollectionSortInput
     $limit: Int
@@ -57,7 +57,7 @@ export type CollectionPage = {
  * @param nextToken Token from the previous page, or null for the first page
  * @returns The page of collections, or an empty page if it can't be loaded
  */
-export async function getBrowseCollections(
+export async function getTopLevelCollections(
   sort: SortOption = { field: "title", direction: "asc" },
   limit = 12,
   nextToken: string | null = null
@@ -75,7 +75,7 @@ export async function getBrowseCollections(
     });
     return data.fulltextCollections;
   } catch (error) {
-    console.error("Error fetching browse collections:", error);
+    console.error("Error fetching top-level collections:", error);
     return { items: [], total: 0, nextToken: null };
   }
 }
