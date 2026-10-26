@@ -3,15 +3,15 @@
 import { useState, type ReactNode } from "react";
 import type { MetadataField } from "@/app/_utils/fetchUtils/getMetadataFields";
 
-// Which fields are shown, by marker; each has a checkbox in the legend.
+// Which markers are ticked in the legend; each checkbox filters the table to fields with it.
 type ShownMarkers = { system: boolean, sip: boolean, facet: boolean };
 
-// System-generated fields follow only their own checkbox. Other fields show when any of their
-// markers is ticked; fields with no markers always show.
+// With nothing ticked every field shows; otherwise only fields that have a ticked marker.
 const isShown = (field: MetadataField, shown: ShownMarkers) => {
-  if (field.isSystemGenerated) return shown.system;
-  if (!field.isSIPRequired && !field.isFacetRequired) return true;
-  return (field.isSIPRequired && shown.sip) || (field.isFacetRequired && shown.facet);
+  if (!shown.system && !shown.sip && !shown.facet) return true;
+  return (field.isSystemGenerated && shown.system) ||
+    (field.isSIPRequired && shown.sip) ||
+    (field.isFacetRequired && shown.facet);
 };
 
 // Plain URLs in descriptions and examples become links, like dlp-access's autoLinkHTML.
@@ -114,7 +114,7 @@ interface Props {
  */
 export default function MetadataGuide({ fields }: Props) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [shown, setShown] = useState<ShownMarkers>({ system: true, sip: true, facet: true });
+  const [shown, setShown] = useState<ShownMarkers>({ system: false, sip: false, facet: false });
   const toggleMarker = (marker: keyof ShownMarkers) =>
     setShown((prev) => ({ ...prev, [marker]: !prev[marker] }));
 
@@ -130,7 +130,7 @@ export default function MetadataGuide({ fields }: Props) {
     ? ""
     : searchQuery
       ? "No metadata fields match your search criteria."
-      : "No fields to show. Tick a marker above to show its fields.";
+      : "No fields match the selected markers.";
 
   return (
     <div className="container metadata-page-wrapper typography-wrapper secondary-page">
@@ -176,7 +176,7 @@ export default function MetadataGuide({ fields }: Props) {
               filtered as you type.
             </p>
             <h3>Results</h3>
-            <ul className="metadata-legend" aria-label="Field markers: untick one to hide the fields that have it">
+            <ul className="metadata-legend" aria-label="Field markers: tick a marker to show only the fields that have it">
               <li>
                 <label>
                   <input type="checkbox" checked={ shown.system } onChange={ () => toggleMarker("system") } />
