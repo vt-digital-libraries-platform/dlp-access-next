@@ -46,8 +46,12 @@ const matchesSearch = (field: MetadataField, searchQuery: string) => {
   );
 };
 
-// Same CSV as dlp-access: one column per field, rows for name, label, type, description, example.
-const downloadCSV = (metadataFields: MetadataField[]) => {
+type CsvLayout = "across" | "down";
+
+// "across" is the same CSV as dlp-access: one column per field, rows for name, label, type,
+// description, example. "down" flips it to one row per field, like the table on the page.
+// Only the fields currently shown (after search and marker filters) are included.
+const downloadCSV = (metadataFields: MetadataField[], layout: CsvLayout) => {
   const columnNames = metadataFields.map((field) => field.columnName);
   const labelNames = metadataFields.map((field) =>
     field.required === "Yes"
@@ -60,13 +64,16 @@ const downloadCSV = (metadataFields: MetadataField[]) => {
   const descriptions = metadataFields.map((field) => field.description);
   const examples = metadataFields.map((field) => field.example);
 
-  const rows = [
+  const acrossRows = [
     ["Metadata Column Name", ...columnNames],
     ["Label Name", ...labelNames],
     ["Type", ...types],
     ["Description", ...descriptions],
     ["Example", ...examples],
   ];
+  const rows = layout === "across"
+    ? acrossRows
+    : acrossRows[0].map((_, column) => acrossRows.map((row) => row[column]));
 
   const csvContent = rows
     .map((row) => row.map((cell) => `"${ cell }"`).join(","))
@@ -76,7 +83,9 @@ const downloadCSV = (metadataFields: MetadataField[]) => {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "metadata_field_reference.csv";
+  link.download = layout === "across"
+    ? "metadata_field_reference.csv"
+    : "metadata_field_reference_by_field.csv";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -117,6 +126,7 @@ export default function MetadataGuide({ fields }: Props) {
   const [shown, setShown] = useState<ShownMarkers>({ system: false, sip: false, facet: false });
   const toggleMarker = (marker: keyof ShownMarkers) =>
     setShown((prev) => ({ ...prev, [marker]: !prev[marker] }));
+  const [csvLayout, setCsvLayout] = useState<CsvLayout>("across");
 
   const metadataFields = fields ?? [];
   // Fields whose column name or label matches come first; the rest keep their order below them
@@ -150,16 +160,46 @@ export default function MetadataGuide({ fields }: Props) {
               </a>
               .
             </p>
-            <button
-              className="button-link--primary download-csv-btn focusable"
-              role="link"
-              onClick={ () => downloadCSV(metadataFields) }
-            >
-              <span className="visually-hidden">
-                Download metadata field reference as CSV
-              </span>
-              <span aria-hidden="true">⬇ Download CSV</span>
-            </button>
+            <div className="csv-download">
+              <button
+                className="button-link--primary download-csv-btn focusable"
+                role="link"
+                onClick={ () => downloadCSV(visibleFields, csvLayout) }
+                disabled={ visibleFields.length === 0 }
+              >
+                <span className="visually-hidden">
+                  Download the metadata fields shown below as CSV
+                </span>
+                <span aria-hidden="true">⬇ Download CSV</span>
+              </button>
+              <fieldset className="csv-layout">
+                <legend>Download CSV layout</legend>
+                <label>
+                  <input
+                    type="radio"
+                    name="csv-layout"
+                    checked={ csvLayout === "across" }
+                    onChange={ () => setCsvLayout("across") }
+                  />
+                  <span>
+                    <b>Fields across the top</b> <b className="csv-layout__purpose">Ingestion template</b>:
+                    the format needed to ingest items
+                  </span>
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="csv-layout"
+                    checked={ csvLayout === "down" }
+                    onChange={ () => setCsvLayout("down") }
+                  />
+                  <span>
+                    <b>Fields down the side</b> <b className="csv-layout__purpose">For viewing</b>:
+                    easier to read, not for ingestion
+                  </span>
+                </label>
+              </fieldset>
+            </div>
           </div>
           <h2 id="metadata-table-heading">Metadata Field Reference</h2>
           <search>
