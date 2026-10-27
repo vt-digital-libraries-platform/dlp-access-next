@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:aws": "node scripts/dev.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
   },
   "dependencies": {
+    "dompurify": "^3.4.17",
     "react": "19.2.1",
     "react-dom": "19.2.1",
     "next": "16.0.7"

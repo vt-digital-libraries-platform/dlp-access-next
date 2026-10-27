@@ -1,0 +1,461 @@
+/*
+ * Metadata Guide styles, copied from dlp-access production:
+ *   1. src/css/Typography.scss: the .typography-wrapper rules this page uses
+ *   2. src/css/MetadataPage.scss: unchanged except // comments became block comments
+ * plus 3. styles for the field markers (system generated, SIP, facet) and their legend.
+ */
+
+/* 1. From Typography.scss */
+
+.typography-wrapper {
+  font-family: "Acherus", sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  text-align: left;
+  color: rgba(0, 0, 0, 1);
+
+  & h1,
+  & h2,
+  & h3 {
+    font-family: "gineso-condensed", sans-serif;
+    font-weight: 600;
+    font-size: 1.125rem;
+    text-align: left;
+  }
+
+  & h1 {
+    font-size: 2.5rem;
+    padding: 1rem 0 0.25rem 0;
+
+    @media (min-width: 1200px) {
+      font-size: 2.75rem;
+      padding: 1.5rem 0 0.25rem 0;
+    }
+  }
+
+  & h2 {
+    font-size: 2rem;
+    padding: 0.5rem 0 0.125rem 0;
+
+    @media (min-width: 1200px) {
+      font-size: 2.25rem;
+      padding: 0.75rem 0 0.125rem 0;
+    }
+  }
+
+  & h3 {
+    font-size: 1.75rem;
+
+    @media (min-width: 1200px) {
+      font-size: 1.875rem;
+    }
+  }
+
+  & p {
+    line-height: 1.6;
+  }
+
+  & a {
+    color: var(--hokieOrange);
+    text-decoration: underline;
+
+    &:visited {
+      color: var(--hokieOrange);
+    }
+    &:hover,
+    &:focus,
+    &:active {
+      color: var(---hokieOrangeHover);
+    }
+  }
+
+  [class*="button-link"] {
+    text-align: center;
+    place-content: center;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    font-family: inherit;
+    white-space: nowrap;
+    color: var(--themeHighlightColor);
+    height: fit-content;
+    width: fit-content;
+    align-self: center;
+    padding: 0.75rem 1.5rem;
+    border: var(--themeHighlightColor) solid 1px;
+    border-radius: var(--button-border-radius);
+    transition: color 0.3s var(--transition-time-function),
+      box-shadow 0.3s var(--transition-time-function),
+      transform 0.3s var(--transition-time-function);
+    transform: translateY(0);
+    outline-offset: 5px;
+    background-color: white;
+    cursor: pointer;
+
+    &:hover,
+    &:focus,
+    &:focus-visible {
+      --boxShadowColor: hsl(
+        from var(--themeHighlightColor) h calc(s * 0.3) calc(l * 0.8) / 0.4
+      );
+      box-shadow: -1px 2px 2px var(--boxShadowColor),
+        -2px 4px 4px var(--boxShadowColor), 1px 6px 6px var(--boxShadowColor);
+      transform: translateY(-2px);
+      @media (prefers-reduced-motion: reduce) {
+        transform: none;
+      }
+    }
+  }
+
+  .button-link--primary {
+    &,
+    span {
+      color: white;
+    }
+
+    border: none;
+    background-color: var(--themeHighlightColor);
+  }
+
+  .focusable,
+  button,
+  a {
+    &:focus-visible {
+      outline: var(--focus_outline);
+      outline-offset: var(--focus-outline__offset);
+    }
+  }
+
+  /* Secondary pages: orange line under h2 */
+  &.secondary-page h2 {
+    border-bottom: 3px solid var(--hokieOrange);
+    width: 100%;
+  }
+}
+
+/* 2. MetadataPage.scss */
+
+.metadata-page-wrapper {
+  padding: 2rem 0;
+
+  .metadata-intro {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .download-csv-btn span {
+    margin-right: 0.5rem;
+  }
+
+  .metadata-content {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .metadata-table-heading {
+    margin-bottom: 2rem;
+  }
+
+  .field-search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+
+  /* Table styles */
+  .table-responsive.metadata-table-section {
+    overflow-x: auto;
+    margin-bottom: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+
+  .metadata-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    font-size: 0.95rem;
+
+    thead {
+      background: var(--vt-impactOrange-4s);
+      color: white;
+
+      th {
+        padding: 1rem;
+        text-align: left;
+        font-weight: 600;
+        white-space: nowrap;
+        border-bottom: 3px solid var(--hokieOrangeHover);
+
+        &:first-child {
+          border-top-left-radius: 8px;
+        }
+
+        &:last-child {
+          border-top-right-radius: 8px;
+        }
+      }
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid #e0e0e0;
+        outline-offset: -2px;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+          background-color: #f5f7fa;
+          outline: var(--hokieMaroon) dashed 2px;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      td,
+      th {
+        padding: 1rem;
+        vertical-align: top;
+
+        &.column-name {
+          font-family: "Courier New", monospace;
+          font-weight: bold;
+          color: #2c3e50;
+          background-color: #f8f9fa;
+          min-width: 180px;
+          text-align: left;
+        }
+
+        &.label-name {
+          font-weight: 600;
+          color: #333;
+          min-width: 150px;
+        }
+
+        .required-indicator {
+          display: inline-block;
+          font-size: 0.8rem;
+          font-weight: 500;
+          font-style: italic;
+          font-family: Arial, sans-serif;
+          color: #850f21;
+          margin-top: 0.25rem;
+        }
+
+        .conditional-indicator {
+          color: #850f21;
+        }
+
+        &.type {
+          color: #2b3791;
+          font-family: "Courier New", monospace;
+          font-size: 0.9rem;
+          min-width: 200px;
+        }
+
+        &.description {
+          color: #000;
+          line-height: 1.6;
+          max-width: 400px;
+        }
+
+        &.example {
+          font-family: "Courier New", monospace;
+          font-size: 0.9rem;
+          color: #741b44;
+          background-color: #f8f9fa;
+          min-width: 200px;
+
+          code {
+            background: none;
+            padding: 0;
+            color: inherit;
+            white-space: pre-wrap;
+            word-break: break-word;
+          }
+
+          /* New: links keep the example's dark color (orange fails WCAG AA contrast on the gray cell) */
+          a,
+          a:visited {
+            color: inherit;
+          }
+        }
+      }
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .metadata-table {
+      font-size: 0.85rem;
+
+      thead th,
+      tbody td {
+        padding: 0.75rem 0.5rem;
+      }
+
+      tbody td {
+        &.column-name,
+        &.type,
+        &.example {
+          min-width: auto;
+        }
+      }
+    }
+  }
+}
+
+@keyframes highlightFade {
+  0% {
+    background-color: #fff8e1;
+  }
+  50% {
+    background-color: #ffe082;
+  }
+  100% {
+    background-color: #fff8e1;
+  }
+}
+
+/* 3. Field markers (new in dlp-access-next) */
+
+.metadata-page-wrapper {
+  .field-flags {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    margin-top: 0.25rem;
+  }
+
+  .field-flag,
+  .metadata-legend .field-flag {
+    display: inline-block;
+    width: fit-content;
+    padding: 0.0625rem 0.5rem;
+    border: 1px solid;
+    border-radius: 999px;
+    font-family: Arial, sans-serif;
+    font-size: 0.8rem;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .field-flag {
+    background-color: white;
+  }
+
+  .field-flag--system {
+    color: #4b4b4b;
+    border-color: #4b4b4b;
+  }
+
+  .field-flag--sip {
+    color: var(--hokieMaroon);
+    border-color: var(--hokieMaroon);
+  }
+
+  .field-flag--facet {
+    color: var(--vt-impactOrange-4s);
+    border-color: var(--vt-impactOrange-4s);
+  }
+
+  /* System-generated rows stand out for review */
+  .metadata-table tbody tr.system-generated-row {
+    background-color: #f1f1f1;
+    box-shadow: inset 4px 0 0 #9a9a9a;
+
+    th.column-name,
+    td.example {
+      background-color: #e9e9e9;
+    }
+  }
+
+  /* Download button with the CSV layout choice beside it (stacks on narrow screens) */
+  .csv-download {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.5rem;
+  }
+
+  .download-csv-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  .csv-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+    margin: 0;
+    padding: 0.75rem 1rem;
+    border: 1px solid #d0d0d0;
+    border-radius: 4px;
+    font-size: 0.9rem;
+
+    legend {
+      padding: 0 0.25rem;
+      font-weight: 600;
+    }
+
+    label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      cursor: pointer;
+    }
+
+    input[type="radio"] {
+      width: 1.125rem;
+      height: 1.125rem;
+      accent-color: var(--hokieMaroon);
+      cursor: pointer;
+    }
+
+    /* Uppercase through CSS, so screen readers say the words instead of spelling letters */
+    .csv-layout__purpose {
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--hokieMaroon);
+    }
+  }
+
+  .metadata-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+    margin: 0 0 1rem 0;
+    padding: 0.75rem 1rem;
+    list-style: none;
+    background-color: #f8f9fa;
+    border-left: 4px solid var(--hokieOrange);
+
+    flex-direction: column;
+
+    li {
+      font-size: 0.9rem;
+    }
+
+    label {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.375rem;
+      cursor: pointer;
+    }
+
+    input[type="checkbox"] {
+      width: 1.125rem;
+      height: 1.125rem;
+      accent-color: var(--hokieMaroon);
+      cursor: pointer;
+    }
+  }
+}
