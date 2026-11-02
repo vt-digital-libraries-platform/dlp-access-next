@@ -5,9 +5,9 @@
  *   2. src/css/FeedbackPage.scss: unchanged
  */
 
-/* 1. From Typography.scss */
+/* 1. From Typography.scss, scoped to this page so it can't change other pages' typography */
 
-.typography-wrapper {
+.feedback-page.typography-wrapper {
   /* DEFAULTS */
 
   font-family: "Acherus", sans-serif;

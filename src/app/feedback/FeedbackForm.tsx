@@ -185,7 +185,7 @@ export default function FeedbackForm({ siteName }: Props) {
   };
 
   return (
-    <div className="container typography-wrapper">
+    <div className="container feedback-page typography-wrapper">
       <h1>Feedback Form</h1>
       <h2 className="visually-hidden">Submit Feedback</h2>
       <div className="feedback-content">
