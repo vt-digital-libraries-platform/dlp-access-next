@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getSite } from "@/app/_utils/fetchUtils/getSite";
 import FeedbackForm from "./FeedbackForm";
-import "./page.css";
+import "./FeedbackForm.css";
 
 export const metadata: Metadata = {
   title: "Feedback",
