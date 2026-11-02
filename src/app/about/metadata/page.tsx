@@ -4,7 +4,7 @@ import { getSite } from "@/app/_utils/fetchUtils/getSite";
 import { getMetadataFields } from "@/app/_utils/fetchUtils/getMetadataFields";
 import { buildHeaderSchema, JsonLd, pageMetadata } from "@/app/_utils/structuredData";
 import MetadataGuide from "./MetadataGuide";
-import "./page.css";
+import "./MetadataGuide.css";
 
 export async function generateMetadata(): Promise<Metadata> {
   const site = await getSite();

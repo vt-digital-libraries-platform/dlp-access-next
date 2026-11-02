@@ -203,42 +203,45 @@ export default function MetadataGuide({ fields }: Props) {
           </div>
           <h2 id="metadata-table-heading">Metadata Field Reference</h2>
           <search>
-            <h3>Search Metadata Fields</h3>
-            <input
-              type="search"
-              className="field-search-input"
-              aria-labelledby="metadata-search-input-label"
-              value={ searchQuery }
-              onChange={ (e) => setSearchQuery(e.target.value) }
-            />
-            <p id="metadata-search-input-label">
-              Search by name, label, type, or description. Results will be
-              filtered as you type.
-            </p>
+            {/* The search box and its marker filters form one group; filtering is live, so submitting does nothing */}
+            <form onSubmit={ (e) => e.preventDefault() }>
+              <h3>Search Metadata Fields</h3>
+              <input
+                type="search"
+                className="field-search-input"
+                aria-labelledby="metadata-search-input-label"
+                value={ searchQuery }
+                onChange={ (e) => setSearchQuery(e.target.value) }
+              />
+              <p id="metadata-search-input-label">
+                Search by name, label, type, description, or example. Results will be
+                filtered as you type.
+              </p>
+              <ul className="metadata-legend" aria-label="Field markers: tick a marker to show only the fields that have it">
+                <li>
+                  <label>
+                    <input type="checkbox" checked={ shown.system } onChange={ () => toggleMarker("system") } />
+                    <span className="field-flag field-flag--system"><span aria-hidden="true">⚙️ </span>System generated</span>:
+                    filled in automatically; you don&apos;t provide it in the CSV
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" checked={ shown.sip } onChange={ () => toggleMarker("sip") } />
+                    <span className="field-flag field-flag--sip"><span aria-hidden="true">📦 </span>SIP required</span>:
+                    used by the SIP program
+                  </label>
+                </li>
+                <li>
+                  <label>
+                    <input type="checkbox" checked={ shown.facet } onChange={ () => toggleMarker("facet") } />
+                    <span className="field-flag field-flag--facet"><span aria-hidden="true">🏷️ </span>Facet required</span>:
+                    used as a search facet
+                  </label>
+                </li>
+              </ul>
+            </form>
             <h3>Results</h3>
-            <ul className="metadata-legend" aria-label="Field markers: tick a marker to show only the fields that have it">
-              <li>
-                <label>
-                  <input type="checkbox" checked={ shown.system } onChange={ () => toggleMarker("system") } />
-                  <span className="field-flag field-flag--system"><span aria-hidden="true">⚙️ </span>System generated</span>:
-                  filled in automatically; you don&apos;t provide it in the CSV
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" checked={ shown.sip } onChange={ () => toggleMarker("sip") } />
-                  <span className="field-flag field-flag--sip"><span aria-hidden="true">📦 </span>SIP required</span>:
-                  used by the SIP program
-                </label>
-              </li>
-              <li>
-                <label>
-                  <input type="checkbox" checked={ shown.facet } onChange={ () => toggleMarker("facet") } />
-                  <span className="field-flag field-flag--facet"><span aria-hidden="true">🏷️ </span>Facet required</span>:
-                  used as a search facet
-                </label>
-              </li>
-            </ul>
             <section className="table-responsive metadata-table-section">
               <table className="metadata-table" tabIndex={ 0 } role="table">
                 <caption className="visually-hidden">

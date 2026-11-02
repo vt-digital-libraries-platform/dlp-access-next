@@ -5,9 +5,9 @@
  * plus 3. styles for the field markers (system generated, SIP, facet) and their legend.
  */
 
-/* 1. From Typography.scss */
+/* 1. From Typography.scss, scoped to this page so it can't change other pages' typography */
 
-.typography-wrapper {
+.metadata-page-wrapper.typography-wrapper {
   font-family: "Acherus", sans-serif;
   font-weight: 400;
   font-size: 1rem;
@@ -361,6 +361,12 @@
   .field-flag--facet {
     color: var(--vt-impactOrange-4s);
     border-color: var(--vt-impactOrange-4s);
+  }
+
+  /* The table can take keyboard focus (to scroll it sideways), so show where focus is */
+  .metadata-table:focus-visible {
+    outline: var(--focus_outline);
+    outline-offset: -3px;
   }
 
   /* System-generated rows stand out for review */
