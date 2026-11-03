@@ -4,8 +4,8 @@ const nextConfig: NextConfig = {
   redirects() {
     return [
       {
-        source: '/archive/:uniqueID',
-        destination: '/item/:uniqueID',
+        source: '/archive/:uniqueId',
+        destination: '/item/:uniqueId',
         permanent: true,
       },
     ]
