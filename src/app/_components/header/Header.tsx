@@ -32,6 +32,8 @@ const aboutLinks: NavLink[] = [
 /**
  * Preserve implicit anchor link for script-opened popovers for weird DOM edge cases
  * 
+ * @todo @kellyme TSDoc
+ * 
  * @param popover 
  * @param source 
  */
@@ -42,7 +44,7 @@ function showPopoverAnchoredTo(popover: HTMLElement, source: HTMLElement) {
 // Double-gated on hover/pointer capability, so a touch tap's pointerenter
 // can't race its own click into open-then-close.
 /**
- * 
+ * @todo @kellyme TSDoc
  * 
  * @param headerRef 
  */
@@ -130,7 +132,7 @@ function useHoverToOpenDropdowns(headerRef: React.RefObject<HTMLElement | null>)
 }
 
 /**
- * Pre-collapses the mobile nav menu to avoid flash on load/hydration.
+ * @todo @kellyme TSDoc
  * 
  * @see Header.css "No-JS Fallback for useMobileNavToggle()"
  * @param headerRef 
@@ -187,7 +189,7 @@ function useMobileNavToggle(headerRef: React.RefObject<HTMLElement | null>) {
 }
 
 /**
- * TODO: @kellyme TSDoc
+ * @todo @kellyme TSDoc
  */
 export default function Header() {
   const headerRef = useRef<HTMLElement>(null);
