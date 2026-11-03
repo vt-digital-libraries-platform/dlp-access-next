@@ -10,12 +10,12 @@ const BrowseTypes = {
 };
 
 interface Props {
-  params: Promise<{ slug: string }>
+  params: Promise<{ browseType: Array<string> }>
 };
 
 /**
- * Slug wrapper for the BrowsePage component intended to be used for routes like
- * [Browse Collections](/browse/collections).
+ * Dynamic route segment wrapper for the BrowsePage component intended to be used for routes like
+ * "Browse Collections" at /browse/collections.
  * 
  * Includes catch-all handling so any additional route segments not contained in the BrowseTypes 
  * object above will be directed to an appropriate page. Examples:
@@ -23,20 +23,24 @@ interface Props {
  *    /browse/formats/cats = /browse/formats
  *    /browse/cats/cats/cats = /browse
  * 
- * @returns BrowsePage which changes based on dynamic optional route segments: [[...slug]]
+ * @todo Add a new passed prop for browse type to be used as a fallback if there is no browse type 
+ * in the route. Resolve collisions with the browseType route slug, ensuring the slug takes priority
+ * over the passed prop.
+ * 
+ * @param browseType The string array of URL slug(s) containing the browseType(s)
+ * @returns BrowsePage which changes based on dynamic optional route segments: [[...browseType]]
  */
 export default async function BrowsePage({ params }: Props) {
-  // TODO: add handling for new browse type prop and resolve collisions with slug, slug takes priority
-  const { slug } = await params;
-  const browseType =
-    Object.keys(BrowseTypes).includes(slug?.at(0))
-    ? slug[0]
+  const { browseType } = await params;
+  const browsePage =
+    Object.keys(BrowseTypes).includes(browseType?.at(0))
+    ? browseType[0]
     : 'all';
 
   return (
     <>
-      <h1>Browse { BrowseTypes[browseType] }</h1>
-      <p>This is the browse { browseType } page.</p>
+      <h1>Browse { BrowseTypes[browsePage] }</h1>
+      <p>This is the browse { browsePage } page.</p>
     </>
   );
 }

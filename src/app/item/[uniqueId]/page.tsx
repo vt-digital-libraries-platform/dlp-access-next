@@ -9,7 +9,7 @@ interface Props {
  * DLP routing.
  * 
  * @param uniqueId The URL slug containing the item's unique 6-character identifier
- * @returns ItemPage which changes based on a dynamic route segment: [slug]
+ * @returns ItemPage for the item with identifier: uniqueID
  */
 export default async function ItemPage({ params }: Props) {
   
