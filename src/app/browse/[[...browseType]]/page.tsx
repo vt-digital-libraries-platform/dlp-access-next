@@ -28,16 +28,18 @@ const BrowseTypes: { [key: string]: string } = {
  */
 export default async function BrowsePage({ params }: PageProps<'/browse/[[...browseType]]'>) {
   const resolvedParams = await params;
-  const browseTypeSlug = 
-    resolvedParams.browseType 
-    && Object.keys(BrowseTypes).includes(resolvedParams.browseType[0])
-    ? resolvedParams.browseType[0] 
+  const browseSlug =  
+    (resolvedParams.browseType && resolvedParams.browseType[0])
+    ?? 'all';
+  const browsePage = 
+    Object.keys(BrowseTypes).includes(browseSlug)
+    ? browseSlug
     : 'all';
 
   return (
     <>
-      <h1>Browse { BrowseTypes[browseTypeSlug] }</h1>
-      <p>This is the browse { browseTypeSlug } page.</p>
+      <h1>Browse { BrowseTypes[browsePage] }</h1>
+      <p>This is the browse { browsePage } page.</p>
     </>
   );
 }
