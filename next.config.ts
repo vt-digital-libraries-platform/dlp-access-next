@@ -1,7 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  redirects() {
+    return [
+      {
+        source: '/archive/:uniqueID',
+        destination: '/item/:uniqueID',
+        permanent: true,
+      },
+    ]
+  },
   output: "standalone",
 };
 
