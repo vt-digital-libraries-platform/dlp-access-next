@@ -1,16 +1,12 @@
 import "./page.css";
 
-const BrowseTypes = {
+const BrowseTypes: { [key: string]: string } = {
   'all': 'Everything',
   'collections': 'Collections',
   'items': 'Items',
   'formats': 'Formats',
   'locations': 'Locations',
   'partners': 'Partner Organizations',
-};
-
-interface Props {
-  params: Promise<{ browseType: Array<string> }>
 };
 
 /**
@@ -30,17 +26,18 @@ interface Props {
  * @param browseType The string array of URL slug(s) containing the browseType(s)
  * @returns BrowsePage which changes based on dynamic optional route segments: [[...browseType]]
  */
-export default async function BrowsePage({ params }: Props) {
-  const { browseType } = await params;
-  const browsePage =
-    Object.keys(BrowseTypes).includes(browseType?.at(0))
-    ? browseType[0]
+export default async function BrowsePage({ params }: PageProps<'/browse/[[...browseType]]'>) {
+  const resolvedParams = await params;
+  const browseTypeSlug = 
+    resolvedParams.browseType 
+    && Object.keys(BrowseTypes).includes(resolvedParams.browseType[0])
+    ? resolvedParams.browseType[0] 
     : 'all';
 
   return (
     <>
-      <h1>Browse { BrowseTypes[browsePage] }</h1>
-      <p>This is the browse { browsePage } page.</p>
+      <h1>Browse { BrowseTypes[browseTypeSlug] }</h1>
+      <p>This is the browse { browseTypeSlug } page.</p>
     </>
   );
 }
