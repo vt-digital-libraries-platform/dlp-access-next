@@ -1,6 +1,6 @@
-interface Props {
-  params: Promise<{ uniqueId: string }>
-};
+// interface Props {
+//   params: Promise<{ uniqueId: string }>
+// };
 
 /**
  * Individual item (archive) view page at /item/[uniqueId].
@@ -11,7 +11,7 @@ interface Props {
  * @param uniqueId The URL slug containing the item's unique 6-character identifier
  * @returns ItemPage for the item with identifier: uniqueID
  */
-export default async function ItemPage({ params }: Props) {
+export default async function ItemPage({ params }: PageProps<'/item/[uniqueId]'>) {
   
   const { uniqueId } = await params;
 

@@ -1,14 +1,10 @@
-interface Props {
-  params: Promise<{ uniqueId: string }>
-};
-
 /**
  * Individual collection view page at /collection/[uniqueId].
  * 
  * @param uniqueId The URL slug containing the collection's unique 6-character identifier
  * @returns CollectionPage for the collection with identifier: uniqueID
  */
-export default async function CollectionPage({ params }: Props) {
+export default async function CollectionPage({ params }: PageProps<'/collection/[uniqueId]'>) {
   
   const { uniqueId } = await params;
 
