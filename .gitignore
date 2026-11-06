@@ -43,6 +43,10 @@ next-env.d.ts
 # EB
 Dockerrun.aws.json
 
+# Local AWS config and personal notes
+aws-exports.js
+/documents/
+
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
