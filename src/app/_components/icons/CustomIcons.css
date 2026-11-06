@@ -55,3 +55,19 @@ button:has(+ [popover]:popover-open)  {
   width: var(--icon-size);
   height: var(--icon-size);
 }
+
+
+/** CopyrightIcon **/
+
+.custom-icon--copyright {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
+
+
+/** ExternalLinkIcon **/
+
+.custom-icon--external-link {
+  width: var(--icon-size);
+  height: var(--icon-size);
+}
