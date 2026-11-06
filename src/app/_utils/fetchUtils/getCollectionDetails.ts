@@ -92,12 +92,8 @@ export function toSlug(customKey: string | null): string {
 }
 
 /**
-<<<<<<< HEAD
  * Fetches one visible collection of this site by its database ID. getCollection can't filter,
  * so the visibility and site checks happen here.
-=======
- * Fetches one collection by its database ID.
->>>>>>> dfcfcc2 (Add toSlug and wire collection page to fetchUtils)
  *
  * @returns The collection, or null if it doesn't exist, is hidden, or belongs to another site
  */
