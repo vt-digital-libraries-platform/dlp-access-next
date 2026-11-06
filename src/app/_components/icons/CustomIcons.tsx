@@ -40,3 +40,29 @@ export function MagnifyingGlassIcon() {
     </svg>
   );
 }
+
+/**
+ *
+ * @returns Copyright svg icon (a "C" inside a circle)
+ */
+export function CopyrightIcon() {
+  return (
+    <svg className="custom-icon--copyright" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <circle cx="10" cy="10" r="8.5" stroke="currentColor" strokeWidth="1.75" fill="none" />
+      <path d="M12.75 7.5A3.5 3.5 0 1 0 12.75 12.5" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
+
+/**
+ *
+ * @returns External link svg icon (an arrow leaving a box)
+ */
+export function ExternalLinkIcon() {
+  return (
+    <svg className="custom-icon--external-link" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+      <path d="M9 4H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+      <path d="M12 3h5v5M17 3l-7.5 7.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  );
+}
